@@ -18,12 +18,42 @@ function ProductForm({ onClose }) {
     setIsLoading(true);
 
     try {
+      const newErrors = {};
+
+      if (!formData.name.trim()) {
+        newErrors.name = "Product name is required";
+      }
+
+      if (!formData.price) {
+        newErrors.price = "Price is required";
+      } else if (parseFloat(formData.price) <= 0) {
+        newErrors.price = "Price must be greater than 0";
+      }
+
+      if (!formData.size.trim()) {
+        newErrors.size = "Size is required";
+      }
+
+      if (!formData.stock) {
+        newErrors.stock = "Price is required";
+      } else if (parseInt(formData.stock) <= 0) {
+        newErrors.stock = "Price must be greater than 0";
+      }
+      setErrors(newErrors);
+
+      if (Object.keys(newErrors).length > 0) {
+        setIsLoading(false);
+        return;
+      }
+
+      //valid
+      console.log(formData);
     } catch (error) {
       error.log(error);
     } finally {
       setIsLoading(false);
     }
-    console.log(formData);
+
     //validations
   };
 
@@ -34,6 +64,13 @@ function ProductForm({ onClose }) {
       ...prev,
       [name]: value,
     }));
+
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
   };
 
   return (
@@ -68,13 +105,15 @@ function ProductForm({ onClose }) {
                     </label>
                     <input
                       type="text"
-                      className={`form-control is-invalid`}
+                      className={`form-control ${
+                        errors.name ? "is-invalid" : ""
+                      }`}
                       placeholder="Name..."
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
                     />
-                    <div className="invalid-feedback">ERROR</div>
+                    <div className="invalid-feedback">{errors.name}</div>
                   </div>
                 </div>
                 <div className="col-md-6">
@@ -122,14 +161,16 @@ function ProductForm({ onClose }) {
                       <input
                         type="number"
                         step="0.01"
-                        className={`form-control is-invalid`}
+                        className={`form-control ${
+                          errors.price ? "is-invalid" : ""
+                        }`}
                         placeholder="0.00"
                         name="price"
                         min="0"
                         value={formData.price}
                         onChange={handleInputChange}
                       />
-                      <div className="invalid-feedback">ERROR</div>
+                      <div className="invalid-feedback">{errors.price}</div>
                     </div>
                   </div>
                 </div>
@@ -141,14 +182,16 @@ function ProductForm({ onClose }) {
                     </label>
                     <input
                       type="text"
-                      className={`form-control is-invalid`}
+                      className={`form-control ${
+                        errors.size ? "is-invalid" : ""
+                      }`}
                       placeholder="Size..."
                       name="size"
                       value={formData.size}
                       onChange={handleInputChange}
                     />
 
-                    <div className="invalid-feedback">ERROR</div>
+                    <div className="invalid-feedback">{errors.size}</div>
                   </div>
                 </div>
                 <div className="col-md-4">
@@ -159,14 +202,16 @@ function ProductForm({ onClose }) {
                     </label>
                     <input
                       type="number"
-                      className={`form-control is-invalid`}
+                      className={`form-control ${
+                        errors.stock ? "is-invalid" : ""
+                      }`}
                       placeholder="0"
                       name="stock"
                       min="0"
                       value={formData.stock}
                       onChange={handleInputChange}
                     />
-                    <div className="invalid-feedback">ERROR</div>
+                    <div className="invalid-feedback">{errors.stock}</div>
                   </div>
                 </div>
               </div>

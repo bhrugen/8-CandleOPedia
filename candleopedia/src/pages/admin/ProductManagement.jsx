@@ -4,7 +4,12 @@ import { useState } from "react";
 import { useGetProductsQuery } from "../../store/api/productsApi";
 function ProductManagement() {
   const [showModal, setShowModal] = useState(false);
-  const { data: products = [] } = useGetProductsQuery();
+  const {
+    data: products = [],
+    isLoading,
+    isError,
+    error,
+  } = useGetProductsQuery();
   const handleCloseModal = () => {
     setShowModal(false);
   };
@@ -81,35 +86,41 @@ function ProductManagement() {
 
             <div className="card border-0 shadow-lg">
               <div className="card-body p-4">
-                <div className="text-center py-5">
-                  <div className="spinner-border text-success" role="status">
-                    <span className="visually-hidden">Loading...</span>
+                {isLoading ? (
+                  <div className="text-center py-5">
+                    <div className="spinner-border text-success" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <p className="mt-3 text-muted">Loading products...</p>
                   </div>
-                  <p className="mt-3 text-muted">Loading products...</p>
-                </div>
-                <div className="text-center py-5">
-                  <div className="alert alert-danger" role="alert">
-                    <i className="bi bi-exclamation-triangle me-2"></i>
-                    Error loading products:
+                ) : isError ? (
+                  <div className="text-center py-5">
+                    <div className="alert alert-danger" role="alert">
+                      <i className="bi bi-exclamation-triangle me-2"></i>
+                      Error loading products:
+                    </div>
                   </div>
-                </div>
-                <div className="text-center py-5">
-                  <i className="bi bi-box-seam fs-1 text-muted mb-3 d-block"></i>
-                  <h5 className="text-muted mb-2">No products found</h5>
-                  <p className="text-muted mb-3">
-                    Start by adding your first product
-                  </p>
-                  <button
-                    className="btn btn-success"
-                    onClick={() => setShowModal(true)}
-                  >
-                    <i className="bi bi-plus-circle me-2"></i>
-                    Add Product
-                  </button>
-                </div>
-                <div>
-                  <ProductTable />
-                </div>
+                ) : products.length == 0 ? (
+                  <div className="text-center py-5">
+                    <i className="bi bi-box-seam fs-1 text-muted mb-3 d-block"></i>
+                    <h5 className="text-muted mb-2">No products found</h5>
+                    <p className="text-muted mb-3">
+                      Start by adding your first product
+                    </p>
+                    <button
+                      className="btn btn-success"
+                      onClick={() => setShowModal(true)}
+                    >
+                      <i className="bi bi-plus-circle me-2"></i>
+                      Add Product
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <ProductTable products={products} />
+                  </div>
+                )}
+
                 {showModal && <ProductForm onClose={handleCloseModal} />}
               </div>
             </div>

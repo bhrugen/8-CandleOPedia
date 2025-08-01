@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { useAddProductMutation } from "../../store/api/productsApi";
 function ProductForm({ onClose }) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -12,6 +12,8 @@ function ProductForm({ onClose }) {
     imageUrl: "",
   });
   const [errors, setErrors] = useState({});
+
+  const [addProduct] = useAddProductMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,7 +49,17 @@ function ProductForm({ onClose }) {
       }
 
       //valid
-      console.log(formData);
+      let result;
+
+      const productData = {
+        ...formData,
+        price: parseFlaot(formData.price),
+        stock: parseInt(formData.stock),
+      };
+
+      result = await addProduct(productData);
+
+      console.log(result);
     } catch (error) {
       error.log(error);
     } finally {

@@ -1,10 +1,10 @@
 import ProductForm from "../../components/products/ProductForm";
 import ProductTable from "../../components/products/ProductTable";
 import { useState } from "react";
-
+import { useGetProductsQuery } from "../../store/api/productsApi";
 function ProductManagement() {
   const [showModal, setShowModal] = useState(false);
-
+  const { data: products = [] } = useGetProductsQuery();
   const handleCloseModal = () => {
     setShowModal(false);
   };

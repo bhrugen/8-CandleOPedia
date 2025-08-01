@@ -1,4 +1,10 @@
-import { collection, addDoc, orderBy, getDocs } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  orderBy,
+  getDocs,
+  query,
+} from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { baseApi } from "./baseApi";
 
@@ -7,13 +13,17 @@ export const productsApi = baseApi.injectEndpoints({
     getProducts: builder.query({
       async queryFn() {
         try {
-          const q = this.query(
+          const q = query(
             collection(db, "products"),
             orderBy("createdAt", "desc")
           );
           const querySnapshot = await getDocs(q);
-          console.log(querySnapshot);
-          return querySnapshot;
+          const products = [];
+          querySnapshot.forEach((doc) => {
+            products.push({ id: doc.id, ...doc.data() });
+          });
+          console.log(products);
+          return { data: products };
         } catch (error) {
           return { error: error.message };
         }
@@ -44,4 +54,4 @@ export const productsApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useAddProductMutation } = productsApi;
+export const { useAddProductMutation, useGetProductsQuery } = productsApi;

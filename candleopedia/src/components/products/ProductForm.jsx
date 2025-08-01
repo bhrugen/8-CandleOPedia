@@ -1,4 +1,4 @@
-function ProductForm() {
+function ProductForm({ onClose }) {
   return (
     <div
       className="modal show d-block"
@@ -15,7 +15,11 @@ function ProductForm() {
                 <i className={`bi bi-pencil-square me-2 `}></i>
                 Add New Product
               </h5>
-              <button type="button" className="btn-close"></button>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={onClose}
+              ></button>
             </div>
             <div className="modal-body p-4">
               <div className="row">
@@ -132,7 +136,11 @@ function ProductForm() {
               </div>
             </div>
             <div className="modal-footer border-0 p-4">
-              <button type="button" className="btn btn-outline-secondary px-4">
+              <button
+                type="button"
+                className="btn btn-outline-secondary px-4"
+                onClick={onClose}
+              >
                 <i className="bi bi-x-circle me-2"></i>
                 Cancel
               </button>

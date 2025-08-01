@@ -1,6 +1,14 @@
 import ProductForm from "../../components/products/ProductForm";
 import ProductTable from "../../components/products/ProductTable";
+import { useState } from "react";
+
 function ProductManagement() {
+  const [showModal, setShowModal] = useState(false);
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <div className="py-4">
       <div className="container py-2">
@@ -59,7 +67,10 @@ function ProductManagement() {
                     </div>
                   </div>
                   <div className="col-md-4 text-end mt-3 mt-md-0">
-                    <button className="btn btn-success px-4 py-2 shadow-sm">
+                    <button
+                      className="btn btn-success px-4 py-2 shadow-sm"
+                      onClick={() => setShowModal(true)}
+                    >
                       <i className="bi bi-plus-circle me-2"></i>
                       Add New Product
                     </button>
@@ -88,7 +99,10 @@ function ProductManagement() {
                   <p className="text-muted mb-3">
                     Start by adding your first product
                   </p>
-                  <button className="btn btn-success">
+                  <button
+                    className="btn btn-success"
+                    onClick={() => setShowModal(true)}
+                  >
                     <i className="bi bi-plus-circle me-2"></i>
                     Add Product
                   </button>
@@ -96,7 +110,7 @@ function ProductManagement() {
                 <div>
                   <ProductTable />
                 </div>
-                <ProductForm />
+                {showModal && <ProductForm onClose={handleCloseModal} />}
               </div>
             </div>
           </div>

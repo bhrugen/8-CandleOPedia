@@ -53,15 +53,29 @@ function ProductForm({ onClose }) {
 
       const productData = {
         ...formData,
-        price: parseFlaot(formData.price),
+        price: parseFloat(formData.price),
         stock: parseInt(formData.stock),
       };
 
-      result = await addProduct(productData);
-
+      result = await addProduct(productData).unwrap();
       console.log(result);
+
+      // Reset form
+      setFormData({
+        name: "",
+        flavor: "",
+        description: "",
+        price: "",
+        size: "",
+        stock: "",
+        imageUrl: "",
+      });
+
+      // Clear errors
+      setErrors({});
+      onClose();
     } catch (error) {
-      error.log(error);
+      console.log(error);
     } finally {
       setIsLoading(false);
     }

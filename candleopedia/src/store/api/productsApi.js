@@ -1,9 +1,25 @@
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, orderBy, getDocs } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { baseApi } from "./baseApi";
 
 export const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getProducts: builder.query({
+      async queryFn() {
+        try {
+          const q = this.query(
+            collection(db, "products"),
+            orderBy("createdAt", "desc")
+          );
+          const querySnapshot = await getDocs(q);
+          console.log(querySnapshot);
+          return querySnapshot;
+        } catch (error) {
+          return { error: error.message };
+        }
+      },
+    }),
+
     addProduct: builder.mutation({
       async queryFn(productData) {
         try {

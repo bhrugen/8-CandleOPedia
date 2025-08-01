@@ -1,10 +1,13 @@
+import { ROUTES } from "../../utility/constants";
+import { Link } from "react-router-dom";
+
 function Header() {
   return (
     <nav className="navbar navbar-expand-sm pt-3 border-bottom shadow-sm">
       <div className="container">
-        <a
+        <Link
           className="navbar-brand fw-bold d-flex align-items-center text-success"
-          href="/"
+          to={ROUTES.HOME}
         >
           <div
             className="me-2 bg-success rounded-2 d-flex align-items-center justify-content-center"
@@ -13,7 +16,7 @@ function Header() {
             <i className="bi bi-gem text-white"></i>
           </div>
           CandleOPedia
-        </a>
+        </Link>
 
         <button
           className="navbar-toggler"
@@ -30,9 +33,9 @@ function Header() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item me-4">
-              <a
+              <Link
                 className="nav-link position-relative btn btn-outline-success rounded-pill px-3 border-2"
-                href="/cart"
+                to={ROUTES.CART}
                 style={{
                   borderWidth: "2px",
                   borderStyle: "solid",
@@ -43,7 +46,7 @@ function Header() {
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   0
                 </span>
-              </a>
+              </Link>
             </li>
 
             <li className="nav-item me-3">
@@ -69,25 +72,25 @@ function Header() {
                 style={{ minWidth: "200px" }}
               >
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <Link className="dropdown-item" to={ROUTES.MY_ORDER}>
                     <i className="bi bi-cart me-2"></i>
                     My Orders
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <hr className="dropdown-divider" />
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <Link className="dropdown-item" to={ROUTES.ADMIN.PRODUCTS}>
                     <i className="bi bi-box me-2"></i>
                     Manage Products
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <Link className="dropdown-item" to={ROUTES.ADMIN.ORDERS}>
                     <i className="bi bi-clipboard-data me-2"></i>
                     Manage Orders
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <hr className="dropdown-divider" />
@@ -102,14 +105,14 @@ function Header() {
             </li>
 
             <li className="nav-item me-2">
-              <a className="nav-link px-4 py-2" href="#">
+              <Link className="nav-link px-4 py-2" to={ROUTES.LOGIN}>
                 Login
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link px-0 py-2" href="#">
+              <Link className="nav-link px-0 py-2" to={ROUTES.REGISTER}>
                 Sign Up
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

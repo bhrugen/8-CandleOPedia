@@ -1,4 +1,33 @@
+import { useState } from "react";
+
 function ProductForm({ onClose }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    flavor: "",
+    description: "",
+    price: "",
+    size: "",
+    stock: "",
+    imageUrl: "",
+  });
+  const [errors, setErrors] = useState({});
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(formData);
+    //validations
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   return (
     <div
       className="modal show d-block"
@@ -9,7 +38,7 @@ function ProductForm({ onClose }) {
     >
       <div className="modal-dialog modal-lg modal-dialog-centered">
         <div className="modal-content border-0 shadow-lg">
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="modal-header bg-success border-0 p-4 ">
               <h5 className="modal-title">
                 <i className={`bi bi-pencil-square me-2 `}></i>
@@ -34,6 +63,8 @@ function ProductForm({ onClose }) {
                       className={`form-control is-invalid`}
                       placeholder="Name..."
                       name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
                     />
                     <div className="invalid-feedback">ERROR</div>
                   </div>
@@ -49,6 +80,8 @@ function ProductForm({ onClose }) {
                       className="form-control"
                       placeholder="Flavors (comma separated)..."
                       name="flavor"
+                      value={formData.flavor}
+                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
@@ -64,6 +97,8 @@ function ProductForm({ onClose }) {
                   rows={4}
                   placeholder="Enter product description..."
                   name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
                 ></textarea>
               </div>
 
@@ -83,6 +118,8 @@ function ProductForm({ onClose }) {
                         placeholder="0.00"
                         name="price"
                         min="0"
+                        value={formData.price}
+                        onChange={handleInputChange}
                       />
                       <div className="invalid-feedback">ERROR</div>
                     </div>
@@ -99,6 +136,8 @@ function ProductForm({ onClose }) {
                       className={`form-control is-invalid`}
                       placeholder="Size..."
                       name="size"
+                      value={formData.size}
+                      onChange={handleInputChange}
                     />
 
                     <div className="invalid-feedback">ERROR</div>
@@ -116,6 +155,8 @@ function ProductForm({ onClose }) {
                       placeholder="0"
                       name="stock"
                       min="0"
+                      value={formData.stock}
+                      onChange={handleInputChange}
                     />
                     <div className="invalid-feedback">ERROR</div>
                   </div>
@@ -131,7 +172,9 @@ function ProductForm({ onClose }) {
                   type="url"
                   className="form-control"
                   placeholder="https://example.com/image.jpg"
-                  value=""
+                  name="imageUrl"
+                  value={formData.imageUrl}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>

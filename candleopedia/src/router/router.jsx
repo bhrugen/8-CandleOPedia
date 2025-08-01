@@ -4,6 +4,9 @@ import Cart from "../pages/shop/Cart";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import { ROUTES } from "../utility/constants";
+import ProductManagement from "../pages/admin/ProductManagement";
+import OrderManagement from "../pages/admin/OrderManagement";
+import MyOrders from "../pages/order/MyOrders";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -11,6 +14,9 @@ const AppRoutes = () => {
       <Route path={ROUTES.CART} element={<Cart />} />
       <Route path={ROUTES.LOGIN} element={<Login />} />
       <Route path={ROUTES.REGISTER} element={<Register />} />
+      <Route path={ROUTES.ADMIN.PRODUCTS} element={<ProductManagement />} />
+      <Route path={ROUTES.ADMIN.ORDERS} element={<OrderManagement />} />
+      <Route path={ROUTES.MY_ORDER} element={<MyOrders />} />
     </Routes>
   );
 };

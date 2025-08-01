@@ -15,6 +15,14 @@ function ProductForm({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
+    try {
+    } catch (error) {
+      error.log(error);
+    } finally {
+      setIsLoading(false);
+    }
     console.log(formData);
     //validations
   };
@@ -187,16 +195,27 @@ function ProductForm({ onClose }) {
                 <i className="bi bi-x-circle me-2"></i>
                 Cancel
               </button>
-              <button type="submit" className="btn btn-success px-4">
-                <div
-                  className="spinner-border spinner-border-sm me-2"
-                  role="status"
-                >
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-                Adding Product...
-                <i className="bi bi-check-circle me-2"></i>
-                Add Product
+              <button
+                type="submit"
+                className="btn btn-success px-4"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <div
+                      className="spinner-border spinner-border-sm me-2"
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    Adding Product...
+                  </>
+                ) : (
+                  <>
+                    <i className="bi bi-check-circle me-2"></i>
+                    Add Product
+                  </>
+                )}
               </button>
             </div>
           </form>

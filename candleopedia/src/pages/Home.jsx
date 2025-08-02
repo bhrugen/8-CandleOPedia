@@ -34,7 +34,7 @@ function Home() {
       ? product.flavor.split(",").map((f) => f.trim())
       : [];
     const matchesFlavor =
-      !searchFlavor || productFlavors.includes(selectedFlavor);
+      !searchFlavor || productFlavors.includes(searchFlavor);
 
     return matchesSearch && matchesFlavor;
   });
@@ -73,8 +73,8 @@ function Home() {
                 <label className="form-label fw-semibold ">Flavor</label>
                 <select
                   className="form-select form-select-lg rounded-pill"
-                  value={searchFlavor}
-                  onChange={(e) => setSearchFlavor(e.target.value)}
+                  value={searchFlavor || ""}
+                  onChange={(e) => setSearchFlavor(e.target.value || "")}
                 >
                   <option value="">All Flavors</option>
                   {uniqueFlavors.map((flavor) => (
@@ -91,14 +91,22 @@ function Home() {
               <div className="col-md-8">
                 <div className="d-flex align-items-center">
                   <span className="text-muted me-3">
-                    <i className="bi bi-funnel me-1"></i>2 of 12 products
-                    matching your criteria
+                    <i className="bi bi-funnel me-1"></i>
+                    {filteredProducts.length} of {products.length} products
+                    {(searchTerm || searchFlavor) && "matching your criteria"}
                   </span>
-
-                  <button className="btn btn-outline-secondary btn-sm rounded-pill">
-                    <i className="bi bi-x me-1"></i>
-                    Clear Filters
-                  </button>
+                  {(searchTerm || searchFlavor) && (
+                    <button
+                      className="btn btn-outline-secondary btn-sm rounded-pill"
+                      onClick={() => {
+                        setSearchFlavor("");
+                        setSearchTerm("");
+                      }}
+                    >
+                      <i className="bi bi-x me-1"></i>
+                      Clear Filters
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

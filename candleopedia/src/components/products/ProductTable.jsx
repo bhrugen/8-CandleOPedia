@@ -65,7 +65,9 @@ function ProductTable({ products = [], onEditProduct, onDeleteProduct }) {
                         className="text-muted mb-0 small"
                         style={{ maxWidth: "200px" }}
                       >
-                        {product.description}
+                        {product.description && product.description.length > 50
+                          ? `${product.description.substring(0, 50)}...`
+                          : product.description}
                       </p>
                     </div>
                   </td>

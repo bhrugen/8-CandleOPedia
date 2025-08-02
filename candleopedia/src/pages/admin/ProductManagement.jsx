@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useGetProductsQuery } from "../../store/api/productsApi";
 function ProductManagement() {
   const [showModal, setShowModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const {
     data: products = [],
     isLoading,
@@ -13,6 +14,19 @@ function ProductManagement() {
   const handleCloseModal = () => {
     setShowModal(false);
   };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredProducts = products.filter((product) => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      product.name?.toLowerCase().includes(searchLower) ||
+      product.flavor?.toLowerCase().includes(searchLower) ||
+      product.description?.toLowerCase().includes(searchLower)
+    );
+  });
 
   return (
     <div className="py-4">
@@ -60,15 +74,19 @@ function ProductManagement() {
                         type="text"
                         className="form-control border-start-0 ps-0"
                         placeholder="Search products by name or flavor..."
-                        defaultValue=""
+                        value={searchTerm}
+                        onChange={handleSearchChange}
                       />
-                      <button
-                        className="btn btn-outline-secondary border-start-0"
-                        type="button"
-                        title="Clear search"
-                      >
-                        <i className="bi bi-x"></i>
-                      </button>
+                      {searchTerm && (
+                        <button
+                          className="btn btn-outline-secondary border-start-0"
+                          type="button"
+                          title="Clear search"
+                          onClick={() => setSearchTerm("")}
+                        >
+                          <i className="bi bi-x"></i>
+                        </button>
+                      )}
                     </div>
                   </div>
                   <div className="col-md-4 text-end mt-3 mt-md-0">
@@ -100,7 +118,7 @@ function ProductManagement() {
                       Error loading products:
                     </div>
                   </div>
-                ) : products.length == 0 ? (
+                ) : filteredProducts.length == 0 ? (
                   <div className="text-center py-5">
                     <i className="bi bi-box-seam fs-1 text-muted mb-3 d-block"></i>
                     <h5 className="text-muted mb-2">No products found</h5>
@@ -117,7 +135,7 @@ function ProductManagement() {
                   </div>
                 ) : (
                   <div>
-                    <ProductTable products={products} />
+                    <ProductTable products={filteredProducts} />
                   </div>
                 )}
 

@@ -1,7 +1,11 @@
 import ProductForm from "../../components/products/ProductForm";
 import ProductTable from "../../components/products/ProductTable";
 import { useState } from "react";
-import { useGetProductsQuery } from "../../store/api/productsApi";
+import {
+  useGetProductsQuery,
+  useDeleteProductMutation,
+} from "../../store/api/productsApi";
+import { toast } from "react-toastify";
 function ProductManagement() {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,6 +17,9 @@ function ProductManagement() {
     isError,
     error,
   } = useGetProductsQuery();
+
+  const [deleteProduct] = useDeleteProductMutation();
+
   const handleCloseModal = () => {
     setShowModal(false);
     setEditingProduct(null);
@@ -28,7 +35,10 @@ function ProductManagement() {
     console.log(product);
   };
 
-  const handleDeleteProduct = () => {};
+  const handleDeleteProduct = async (product) => {
+    await deleteProduct(product.id);
+    toast.success(`${product.name} deleted successfully`);
+  };
 
   const filteredProducts = products.filter((product) => {
     const searchLower = searchTerm.toLowerCase();
@@ -149,6 +159,7 @@ function ProductManagement() {
                     <ProductTable
                       products={filteredProducts}
                       onEditProduct={handleEditProduct}
+                      onDeleteProduct={handleDeleteProduct}
                     />
                   </div>
                 )}

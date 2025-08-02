@@ -76,22 +76,22 @@ export const productsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["Product"],
     }),
-  }),
 
-  deleteProduct: builder.mutation({
-    async queryFn(id) {
-      try {
-        await deleteDoc(doc(db, "products", id));
-        return {
-          data: {
-            id,
-          },
-        };
-      } catch (error) {
-        return { error: error.message };
-      }
-    },
-    invalidatesTags: ["Product"],
+    deleteProduct: builder.mutation({
+      async queryFn(id) {
+        try {
+          await deleteDoc(doc(db, "products", id));
+          return {
+            data: {
+              id,
+            },
+          };
+        } catch (error) {
+          return { error: error.message };
+        }
+      },
+      invalidatesTags: ["Product"],
+    }),
   }),
 });
 

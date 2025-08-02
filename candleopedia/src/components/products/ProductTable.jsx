@@ -1,4 +1,8 @@
-function ProductTable({ products = [], onEditProduct }) {
+function ProductTable({ products = [], onEditProduct, onDeleteProduct }) {
+  const handleDeleteClick = (product) => {
+    onDeleteProduct(product);
+  };
+
   return (
     <div className="card border-0 shadow-sm">
       <div className="card-header border-0 py-3">
@@ -92,6 +96,7 @@ function ProductTable({ products = [], onEditProduct }) {
                       <button
                         className="btn btn-outline-danger btn-sm px-3"
                         title="Delete Product"
+                        onClick={() => handleDeleteClick(product)}
                       >
                         <i className="bi bi-trash3"></i>
                       </button>

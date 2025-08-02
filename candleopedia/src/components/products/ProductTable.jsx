@@ -46,12 +46,15 @@ function ProductTable({ products = [], onEditProduct, onDeleteProduct }) {
                 <tr key={product.id} className="border-0">
                   <td className="ps-4 py-3">
                     <img
-                      src="https://placehold.co/60x60/f8f9fa/6c757d?text=No+Image"
+                      src={product.imageUrl || "https://placehold.co/60x60/"}
                       style={{
                         width: "60px",
                         height: "60px",
                         borderRadius: "15px",
                         objectFit: "cover",
+                      }}
+                      onError={(e) => {
+                        e.target.src = "https://placehold.co/60x60/";
                       }}
                     />
                   </td>

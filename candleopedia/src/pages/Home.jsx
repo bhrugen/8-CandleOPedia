@@ -132,27 +132,34 @@ function Home() {
             Error loading products. Please try again later.
           </div>
         )}
-        <div className="text-center py-5">
-          <i className="bi bi-search text-muted display-1"></i>
-          <p className="mt-3 text-muted fs-5">
-            No products found matching your search criteria.
-          </p>
-          <p className="text-muted">
-            Try adjusting your search terms or filters.
-          </p>
-          <button className="btn btn-outline-success mt-2 rounded-pill">
-            <i className="bi bi-arrow-clockwise me-1"></i>
-            Clear All Filters
-          </button>
-        </div>
 
-        <div className="text-center py-5">
-          <i className="bi bi-box text-muted display-1"></i>
-          <p className="mt-3 text-muted fs-5">
-            No products available at the moment.
-          </p>
-        </div>
+        {!isLoading &&
+          !error &&
+          filteredProducts.length === 0 &&
+          products.length > 0 && (
+            <div className="text-center py-5">
+              <i className="bi bi-search text-muted display-1"></i>
+              <p className="mt-3 text-muted fs-5">
+                No products found matching your search criteria.
+              </p>
+              <p className="text-muted">
+                Try adjusting your search terms or filters.
+              </p>
+              <button className="btn btn-outline-success mt-2 rounded-pill">
+                <i className="bi bi-arrow-clockwise me-1"></i>
+                Clear All Filters
+              </button>
+            </div>
+          )}
 
+        {!isLoading && !error && products.length === 0 && (
+          <div className="text-center py-5">
+            <i className="bi bi-box text-muted display-1"></i>
+            <p className="mt-3 text-muted fs-5">
+              No products available at the moment.
+            </p>
+          </div>
+        )}
         <div className="row g-4">
           {!isLoading &&
             !error &&

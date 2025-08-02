@@ -1,6 +1,22 @@
+import Swal from "sweetalert2";
+
 function ProductTable({ products = [], onEditProduct, onDeleteProduct }) {
   const handleDeleteClick = (product) => {
-    onDeleteProduct(product);
+    Swal.fire({
+      title: "Are you sure?",
+      text: `You want to delete "${product.name}"? This action cannot be undone!`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc3545",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        onDeleteProduct(product);
+      }
+    });
   };
 
   return (

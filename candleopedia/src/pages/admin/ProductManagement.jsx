@@ -28,6 +28,8 @@ function ProductManagement() {
     console.log(product);
   };
 
+  const handleDeleteProduct = () => {};
+
   const filteredProducts = products.filter((product) => {
     const searchLower = searchTerm.toLowerCase();
     return (

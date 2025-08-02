@@ -2,6 +2,7 @@ import {
   collection,
   addDoc,
   updateDoc,
+  deleteDoc,
   orderBy,
   getDocs,
   query,
@@ -76,10 +77,27 @@ export const productsApi = baseApi.injectEndpoints({
       invalidatesTags: ["Product"],
     }),
   }),
+
+  deleteProduct: builder.mutation({
+    async queryFn(id) {
+      try {
+        await deleteDoc(doc(db, "products", id));
+        return {
+          data: {
+            id,
+          },
+        };
+      } catch (error) {
+        return { error: error.message };
+      }
+    },
+    invalidatesTags: ["Product"],
+  }),
 });
 
 export const {
   useAddProductMutation,
   useUpdateProductMutation,
   useGetProductsQuery,
+  useDeleteProductMutation,
 } = productsApi;

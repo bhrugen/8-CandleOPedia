@@ -5,6 +5,8 @@ import { useGetProductsQuery } from "../../store/api/productsApi";
 function ProductManagement() {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [editingProduct, setEditingProduct] = useState(null);
+
   const {
     data: products = [],
     isLoading,
@@ -13,10 +15,17 @@ function ProductManagement() {
   } = useGetProductsQuery();
   const handleCloseModal = () => {
     setShowModal(false);
+    setEditingProduct(null);
   };
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
+  };
+
+  const handleEditProduct = (product) => {
+    setShowModal(true);
+    setEditingProduct(product);
+    console.log(product);
   };
 
   const filteredProducts = products.filter((product) => {
@@ -135,11 +144,19 @@ function ProductManagement() {
                   </div>
                 ) : (
                   <div>
-                    <ProductTable products={filteredProducts} />
+                    <ProductTable
+                      products={filteredProducts}
+                      onEditProduct={handleEditProduct}
+                    />
                   </div>
                 )}
 
-                {showModal && <ProductForm onClose={handleCloseModal} />}
+                {showModal && (
+                  <ProductForm
+                    onClose={handleCloseModal}
+                    editingProduct={editingProduct}
+                  />
+                )}
               </div>
             </div>
           </div>

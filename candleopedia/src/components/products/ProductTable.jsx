@@ -1,4 +1,4 @@
-function ProductTable({ products = [] }) {
+function ProductTable({ products = [], onEditProduct }) {
   return (
     <div className="card border-0 shadow-sm">
       <div className="card-header border-0 py-3">
@@ -76,6 +76,7 @@ function ProductTable({ products = [] }) {
                       <button
                         className="btn btn-outline-primary btn-sm px-3"
                         title="Edit Product"
+                        onClick={() => onEditProduct(product)}
                       >
                         <i className="bi bi-pencil-square"></i>
                       </button>

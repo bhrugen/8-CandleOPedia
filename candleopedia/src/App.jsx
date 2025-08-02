@@ -2,6 +2,7 @@ import Footer from "./components/layout/Footer";
 import Header from "./components/layout/Header";
 import AppRoutes from "./router/router";
 import { BrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 function App() {
   return (
     <BrowserRouter>
@@ -11,6 +12,7 @@ function App() {
           <AppRoutes />
         </main>
         <Footer />
+        <ToastContainer />
       </div>
     </BrowserRouter>
   );

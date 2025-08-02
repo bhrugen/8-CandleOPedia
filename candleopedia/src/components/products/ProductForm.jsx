@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import {
   useAddProductMutation,
   useUpdateProductMutation,
@@ -80,10 +81,10 @@ function ProductForm({ onClose, editingProduct }) {
           id: editingProduct.id,
           ...productData,
         }).unwrap();
-        console.log("Product updated successfully:", result);
+        toast.success("Product updated successfully");
       } else {
         result = await addProduct(productData).unwrap();
-        console.log("Product added successfully:", result);
+        toast.success("Product created successfully");
       }
       // Reset form
       setFormData({
@@ -101,6 +102,7 @@ function ProductForm({ onClose, editingProduct }) {
       onClose();
     } catch (error) {
       console.log(error);
+      toast.error("Error encountered:", error);
     } finally {
       setIsLoading(false);
     }

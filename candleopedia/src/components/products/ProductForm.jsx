@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { useAddProductMutation } from "../../store/api/productsApi";
+import {
+  useAddProductMutation,
+  useUpdateProductMutation,
+} from "../../store/api/productsApi";
 function ProductForm({ onClose, editingProduct }) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -14,6 +17,7 @@ function ProductForm({ onClose, editingProduct }) {
   const [errors, setErrors] = useState({});
   const isEditing = !!editingProduct;
   const [addProduct] = useAddProductMutation();
+  const [updateProduct] = useUpdateProductMutation();
 
   useEffect(() => {
     if (editingProduct) {
@@ -71,9 +75,16 @@ function ProductForm({ onClose, editingProduct }) {
         stock: parseInt(formData.stock),
       };
 
-      result = await addProduct(productData).unwrap();
-      console.log(result);
-
+      if (isEditing) {
+        result = await updateProduct({
+          id: editingProduct.id,
+          ...productData,
+        }).unwrap();
+        console.log("Product updated successfully:", result);
+      } else {
+        result = await addProduct(productData).unwrap();
+        console.log("Product added successfully:", result);
+      }
       // Reset form
       setFormData({
         name: "",

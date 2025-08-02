@@ -1,9 +1,11 @@
 import {
   collection,
   addDoc,
+  updateDoc,
   orderBy,
   getDocs,
   query,
+  doc,
 } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { baseApi } from "./baseApi";
@@ -53,7 +55,31 @@ export const productsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["Product"],
     }),
+
+    updateProduct: builder.mutation({
+      async queryFn({ id, ...productData }) {
+        try {
+          const updateData = {
+            ...productData,
+          };
+          await updateDoc(doc(db, "products", id), updateData);
+          return {
+            data: {
+              id,
+              ...productData,
+            },
+          };
+        } catch (error) {
+          return { error: error.message };
+        }
+      },
+      invalidatesTags: ["Product"],
+    }),
   }),
 });
 
-export const { useAddProductMutation, useGetProductsQuery } = productsApi;
+export const {
+  useAddProductMutation,
+  useUpdateProductMutation,
+  useGetProductsQuery,
+} = productsApi;

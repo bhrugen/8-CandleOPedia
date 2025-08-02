@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAddProductMutation } from "../../store/api/productsApi";
-function ProductForm({ onClose }) {
+function ProductForm({ onClose, editingProduct }) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -12,8 +12,22 @@ function ProductForm({ onClose }) {
     imageUrl: "",
   });
   const [errors, setErrors] = useState({});
-
+  const isEditing = !!editingProduct;
   const [addProduct] = useAddProductMutation();
+
+  useEffect(() => {
+    if (editingProduct) {
+      setFormData({
+        name: editingProduct.name || "",
+        flavor: editingProduct.flavor || "",
+        description: editingProduct.description || "",
+        price: editingProduct.price?.toString() || "",
+        size: editingProduct.size || "",
+        stock: editingProduct.stock?.toString() || "",
+        imageUrl: editingProduct.imageUrl || "",
+      });
+    }
+  }, [editingProduct]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -112,8 +126,12 @@ function ProductForm({ onClose }) {
           <form onSubmit={handleSubmit}>
             <div className="modal-header bg-success border-0 p-4 ">
               <h5 className="modal-title">
-                <i className={`bi bi-pencil-square me-2 `}></i>
-                Add New Product
+                <i
+                  className={`bi bi-${
+                    isEditing ? "pencil-square" : "plus-square"
+                  } me-2 `}
+                ></i>
+                {isEditing ? "Edit Product" : "Add New Product"}
               </h5>
               <button
                 type="button"
@@ -279,12 +297,12 @@ function ProductForm({ onClose }) {
                     >
                       <span className="visually-hidden">Loading...</span>
                     </div>
-                    Adding Product...
+                    {isEditing ? "Updating Product..." : "Adding Product..."}
                   </>
                 ) : (
                   <>
                     <i className="bi bi-check-circle me-2"></i>
-                    Add Product
+                    {isEditing ? "Update Product" : "Add Product"}
                   </>
                 )}
               </button>

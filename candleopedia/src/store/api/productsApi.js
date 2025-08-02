@@ -28,6 +28,7 @@ export const productsApi = baseApi.injectEndpoints({
           return { error: error.message };
         }
       },
+      providesTags: ["Product"],
     }),
 
     addProduct: builder.mutation({
@@ -50,6 +51,7 @@ export const productsApi = baseApi.injectEndpoints({
           return { error: error.message };
         }
       },
+      invalidatesTags: ["Product"],
     }),
   }),
 });

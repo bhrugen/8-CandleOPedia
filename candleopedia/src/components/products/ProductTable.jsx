@@ -48,10 +48,15 @@ function ProductTable({ products = [], onEditProduct }) {
                   </td>
                   <td className="py-3">
                     <div className="d-flex flex-wrap gap-1">
-                      <span className="badge  border px-2 py-1 rounded-pill">
-                        <i className="bi bi-tag me-1"></i>
-                        {product.flavor}
-                      </span>
+                      {product.flavor.split(",").map((flavor, index) => (
+                        <span
+                          key={index}
+                          className="badge bg-secondary  border px-2 py-1 rounded-pill"
+                        >
+                          <i className="bi bi-tag me-1"></i>
+                          {flavor.trim()}
+                        </span>
+                      ))}
                     </div>
                   </td>
                   <td className="py-3">
@@ -66,7 +71,11 @@ function ProductTable({ products = [], onEditProduct }) {
                     </span>
                   </td>
                   <td className="py-3">
-                    <span className={`badge px-3 py-2 rounded-pill bg-success`}>
+                    <span
+                      className={`badge px-3 py-2 rounded-pill ${
+                        product.stock <= 10 ? "bg-warning" : "bg-success"
+                      } `}
+                    >
                       <i className="bi bi-boxes me-1"></i>
                       {product.stock} items
                     </span>

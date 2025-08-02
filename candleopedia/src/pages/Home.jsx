@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 
 function Home() {
   const [showModal, setShowModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchFlavor, setSearchFlavor] = useState(null);
 
@@ -38,6 +39,15 @@ function Home() {
 
     return matchesSearch && matchesFlavor;
   });
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedProduct(null);
+  };
+
+  const handleProductClick = (product) => {
+    setShowModal(true);
+    setSelectedProduct(product);
+  };
 
   return (
     <div className="container my-5">
@@ -176,13 +186,21 @@ function Home() {
                 key={product.id || index}
                 className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 "
               >
-                <ProductCard product={product} />
+                <ProductCard
+                  product={product}
+                  onQuickView={handleProductClick}
+                />
               </div>
             ))}
         </div>
       </section>
 
       <hr className="my-5" />
+      <ProductDetailsModal
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        product={selectedProduct}
+      />
     </div>
   );
 }

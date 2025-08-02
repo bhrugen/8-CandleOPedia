@@ -1,4 +1,8 @@
-function ProductDetailsModal() {
+function ProductDetailsModal({ isOpen, onClose, product }) {
+  if (!isOpen || !product) {
+    return null;
+  }
+
   return (
     <div
       className="modal fade show d-block"
@@ -13,6 +17,7 @@ function ProductDetailsModal() {
               type="button"
               className="btn-close"
               aria-label="Close"
+              onClick={() => onClose()}
             ></button>
           </div>
           <div className="modal-body">
@@ -64,7 +69,11 @@ function ProductDetailsModal() {
             </div>
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => onClose()}
+            >
               Close
             </button>
           </div>

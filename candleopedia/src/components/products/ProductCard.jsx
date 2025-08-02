@@ -1,4 +1,4 @@
-function ProductCard({ product }) {
+function ProductCard({ product, onQuickView }) {
   return (
     <div
       className="card product-card h-100 border shadow rounded-3 overflow-hidden clickable"
@@ -22,6 +22,7 @@ function ProductCard({ product }) {
           className="btn btn-outline-success position-absolute top-0 end-0 m-3 rounded-circle border-2 d-flex align-items-center justify-content-center"
           style={{ width: "45px", height: "45px" }}
           title="Quick View"
+          onClick={() => onQuickView(product)}
         >
           <i className="bi bi-eye-fill fs-5"></i>
         </button>

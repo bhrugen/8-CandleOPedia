@@ -1,4 +1,4 @@
-function ProductCard() {
+function ProductCard({ product }) {
   return (
     <div
       className="card product-card h-100 border shadow rounded-3 overflow-hidden clickable"
@@ -7,15 +7,16 @@ function ProductCard() {
       <div className="position-relative">
         <div style={{ height: "260px" }} className="">
           <img
-            src="https://placehold.co/300"
+            src={product.imageUrl || "https://placehold.co/300"}
             className="product-image img-fluid w-100 h-100 object-fit-cover"
           />
         </div>
-
-        <span className="position-absolute top-0 start-0 m-3 badge rounded-pill bg-warning fw-semibold px-3 py-2">
-          <i className="bi bi-exclamation-triangle-fill me-1"></i>
-          Low Stock
-        </span>
+        {product.stock <= 10 && (
+          <span className="position-absolute top-0 start-0 m-3 badge rounded-pill bg-warning fw-semibold px-3 py-2">
+            <i className="bi bi-exclamation-triangle-fill me-1"></i>
+            Low Stock
+          </span>
+        )}
 
         <button
           className="btn btn-outline-success position-absolute top-0 end-0 m-3 rounded-circle border-2 d-flex align-items-center justify-content-center"
@@ -27,7 +28,9 @@ function ProductCard() {
       </div>
 
       <div className="card-body p-4 d-flex flex-column">
-        <h5 className="card-title fw-bold mb-2 text-truncate">NAME</h5>
+        <h5 className="card-title fw-bold mb-2 text-truncate">
+          {product.name}
+        </h5>
 
         <p
           className="card-text text-muted mb-3"
@@ -39,24 +42,28 @@ function ProductCard() {
             overflow: "hidden",
           }}
         >
-          DESCRIPTION
+          {product.description}
         </p>
 
         <div className="mb-3">
           <div className="d-flex flex-wrap gap-2 mb-2">
             <span className="badge bg-success bg-opacity-10 text-success fw-semibold px-3 py-1 rounded-pill border border-success">
-              FLAVOR
+              {product.flavor}
             </span>
-            <span className="badge fw-medium px-3 py-1 rounded-pill">Size</span>
+            <span className="badge fw-medium px-3 py-1 rounded-pill">
+              {product.size}
+            </span>
           </div>
         </div>
 
         <div className="d-flex align-items-center justify-content-between mb-3">
           <div className="d-flex align-items-center text-muted">
             <i className="bi bi-box me-2"></i>
-            <span className="small fw-medium">00 available</span>
+            <span className="small fw-medium">{product.stock} available</span>
           </div>
-          <h4 className="mb-0 fw-bold text-success">PRICE</h4>
+          <h4 className="mb-0 fw-bold text-success">
+            ${product.price.toFixed(2)}
+          </h4>
         </div>
 
         <div className="mt-auto">

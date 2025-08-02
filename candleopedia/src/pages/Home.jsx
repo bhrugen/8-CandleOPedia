@@ -118,18 +118,20 @@ function Home() {
           </p>
         </div>
 
-        <div className="text-center py-5">
-          <div className="spinner-border text-success" role="status">
-            <span className="visually-hidden">Loading...</span>
+        {isLoading && (
+          <div className="text-center py-5">
+            <div className="spinner-border text-success" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <p className="mt-3 text-muted">Loading products...</p>
           </div>
-          <p className="mt-3 text-muted">Loading products...</p>
-        </div>
-
-        <div className="alert alert-danger text-center" role="alert">
-          <i className="bi bi-exclamation-triangle me-2"></i>
-          Error loading products. Please try again later.
-        </div>
-
+        )}
+        {error && (
+          <div className="alert alert-danger text-center" role="alert">
+            <i className="bi bi-exclamation-triangle me-2"></i>
+            Error loading products. Please try again later.
+          </div>
+        )}
         <div className="text-center py-5">
           <i className="bi bi-search text-muted display-1"></i>
           <p className="mt-3 text-muted fs-5">
@@ -152,9 +154,16 @@ function Home() {
         </div>
 
         <div className="row g-4">
-          <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 ">
-            <ProductCard />
-          </div>
+          {!isLoading &&
+            !error &&
+            filteredProducts.map((product, index) => (
+              <div
+                key={product.id || index}
+                className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 "
+              >
+                <ProductCard product={product} />
+              </div>
+            ))}
         </div>
       </section>
 

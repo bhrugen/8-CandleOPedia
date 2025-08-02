@@ -26,11 +26,17 @@ function Home() {
 
   const filteredProducts = products.filter((product) => {
     const searchLower = searchTerm.toLowerCase();
-    return (
+    const matchesSearch =
       product.name?.toLowerCase().includes(searchLower) ||
-      product.flavor?.toLowerCase().includes(searchLower) ||
-      product.description?.toLowerCase().includes(searchLower)
-    );
+      product.description?.toLowerCase().includes(searchLower);
+
+    const productFlavors = product.flavor
+      ? product.flavor.split(",").map((f) => f.trim())
+      : [];
+    const matchesFlavor =
+      !searchFlavor || productFlavors.includes(selectedFlavor);
+
+    return matchesSearch && matchesFlavor;
   });
 
   return (
@@ -71,6 +77,12 @@ function Home() {
                   onChange={(e) => setSearchFlavor(e.target.value)}
                 >
                   <option value="">All Flavors</option>
+                  {uniqueFlavors.map((flavor) => (
+                    <option key={flavor} value={flavor}>
+                      {flavor.charAt(0).toUpperCase() +
+                        flavor.slice(1).toLowerCase()}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>

@@ -1,7 +1,38 @@
 import ProductCard from "../components/products/ProductCard";
 import ProductDetailsModal from "../components/products/ProductDetailsModal";
 
+import { useState } from "react";
+import { useGetProductsQuery } from "../store/api/productsApi";
+import { toast } from "react-toastify";
+
 function Home() {
+  const [showModal, setShowModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchFlavor, setSearchFlavor] = useState(null);
+
+  const {
+    data: products = [],
+    isLoading,
+    isError,
+    error,
+  } = useGetProductsQuery();
+
+  const allFlavors = products
+    .map((p) => p.flavor)
+    .filter((f) => f)
+    .flatMap((f) => f.split(",").map((flavor) => flavor.trim()));
+
+  const uniqueFlavors = [...new Set(allFlavors)];
+
+  const filteredProducts = products.filter((product) => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      product.name?.toLowerCase().includes(searchLower) ||
+      product.flavor?.toLowerCase().includes(searchLower) ||
+      product.description?.toLowerCase().includes(searchLower)
+    );
+  });
+
   return (
     <div className="container my-5">
       <section className="rounded-4 p-4 mb-5">
@@ -24,6 +55,8 @@ function Home() {
                 <div className="position-relative">
                   <input
                     type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     className="form-control form-control-lg ps-5 rounded-pill"
                     placeholder="What are you looking for?"
                   />
@@ -32,7 +65,11 @@ function Home() {
               </div>
               <div className="col-lg-4 col-md-5">
                 <label className="form-label fw-semibold ">Flavor</label>
-                <select className="form-select form-select-lg rounded-pill">
+                <select
+                  className="form-select form-select-lg rounded-pill"
+                  value={searchFlavor}
+                  onChange={(e) => setSearchFlavor(e.target.value)}
+                >
                   <option value="">All Flavors</option>
                 </select>
               </div>

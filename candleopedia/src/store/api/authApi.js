@@ -47,10 +47,7 @@ export const authApi = baseApi.injectEndpoints({
             createdAt: new Date().toISOString(),
           };
 
-          const docRef = await setDoc(
-            collection(db, "users", user.uid),
-            userData
-          );
+          const docRef = await setDoc(doc(db, "users", user.uid), userData);
 
           return {
             data: createUserData(user, "customer"),

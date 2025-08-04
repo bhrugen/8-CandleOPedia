@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-
+import { toast } from "react-toastify";
+import { useRegisterUserMutation } from "../../store/api/authApi";
 function Register() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [registerUser] = useRegisterUserMutation();
   const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -57,6 +59,8 @@ function Register() {
       //valid
 
       //registeration
+      const result = await registerUser(formData).unwrap();
+      console.log(result);
     } catch (error) {
       console.log(error);
       toast.error("Error encountered:", error);
@@ -81,18 +85,6 @@ function Register() {
                   </div>
                   <h1 className="h3 mb-2 fw-bold">Create Account</h1>
                   <p className="text-muted">Join us and start shopping today</p>
-                </div>
-                <div
-                  className="alert alert-danger alert-dismissible fade show"
-                  role="alert"
-                >
-                  <i className="bi bi-exclamation-triangle-fill me-2"></i>
-                  ERROR
-                  <button
-                    type="button"
-                    className="btn-close"
-                    aria-label="Close"
-                  ></button>
                 </div>
 
                 <form onSubmit={handleSubmit}>

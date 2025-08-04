@@ -31,6 +31,40 @@ function Register() {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const newErrors = {};
+
+      if (!formData.displayName.trim()) {
+        newErrors.displayName = "Display name is required";
+      }
+      if (!formData.email.trim()) {
+        newErrors.email = "Email is required";
+      }
+      if (!formData.password.trim()) {
+        newErrors.password = "Password is required";
+      }
+
+      setErrors(newErrors);
+
+      if (Object.keys(newErrors).length > 0) {
+        setIsLoading(false);
+        return;
+      }
+
+      //valid
+
+      //registeration
+    } catch (error) {
+      console.log(error);
+      toast.error("Error encountered:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="pt-5 d-flex align-items-center">
       <div className="container">
@@ -61,7 +95,7 @@ function Register() {
                   ></button>
                 </div>
 
-                <form>
+                <form onSubmit={handleSubmit}>
                   <div className="form-floating mb-3">
                     <input
                       type="text"
@@ -69,7 +103,7 @@ function Register() {
                       name="displayName"
                       placeholder="Full Name"
                       className={`form-control ${
-                        errors.name ? "is-invalid" : ""
+                        errors.displayName ? "is-invalid" : ""
                       }`}
                       value={formData.displayName}
                       onChange={handleInputChange}
@@ -84,7 +118,7 @@ function Register() {
                     <input
                       type="email"
                       className={`form-control ${
-                        errors.name ? "is-invalid" : ""
+                        errors.email ? "is-invalid" : ""
                       }`}
                       value={formData.email}
                       onChange={handleInputChange}
@@ -102,7 +136,7 @@ function Register() {
                     <input
                       type="password"
                       className={`form-control ${
-                        errors.name ? "is-invalid" : ""
+                        errors.password ? "is-invalid" : ""
                       }`}
                       value={formData.password}
                       onChange={handleInputChange}

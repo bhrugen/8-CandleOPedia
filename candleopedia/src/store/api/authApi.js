@@ -7,14 +7,23 @@ import {
   getDocs,
   query,
   doc,
+  setDoc,
 } from "firebase/firestore";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  updateProfile,
 } from "firebase/auth";
 import { db, auth } from "../../services/firebase";
 import { baseApi } from "./baseApi";
+
+const createUserData = (user, role = "customer") => ({
+  uid: user.uid,
+  email: user.email,
+  displayName: user.displayName,
+  role: role,
+});
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -28,25 +37,28 @@ export const authApi = baseApi.injectEndpoints({
           );
 
           const user = userCredentials.user;
+          await updateProfile(user, { displayName });
+          console.log("✅ Firebase Auth user created:", user.uid);
+          const userData = {
+            uid: user.uid,
+            email: user.email,
+            displayName,
+            role: "customer",
+            createdAt: new Date().toISOString(),
+          };
 
-          const timeStamp = new Date().toISOString();
-          const docRef = await addDoc(collection(db, "products"), {
-            ...productData,
-            createdAt: timeStamp,
-          });
+          const docRef = await setDoc(
+            collection(db, "users", user.uid),
+            userData
+          );
 
           return {
-            data: {
-              id: docRef.id,
-              ...productData,
-              createdAt: timeStamp,
-            },
+            data: createUserData(user, "customer"),
           };
         } catch (error) {
           return { error: error.message };
         }
       },
-      invalidatesTags: ["Product"],
     }),
   }),
 });

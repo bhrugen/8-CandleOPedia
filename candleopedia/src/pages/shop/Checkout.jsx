@@ -1,9 +1,46 @@
+import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { ROUTES } from "../../utility/constants";
+
 function Checkout() {
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { items, totalQuantity, totalAmount } = useSelector(
+    (state) => state.cart
+  );
+
+  const handleOrderSubmit = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const formData = new FormData(e.target);
+
+    try {
+      const shippingInfo = {
+        firstName: formData.get("firstName"),
+        lastName: formData.get("lastName"),
+        email: formData.get("email"),
+        phone: formData.get("phone"),
+        address: formData.get("address"),
+        city: formData.get("city"),
+        state: formData.get("state"),
+        zipCode: formData.get("zipCode"),
+      };
+
+      //place order
+    } catch (error) {
+      console.error("Order submission error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="container py-4">
       <h2 className="mb-4">Checkout</h2>
 
-      <form>
+      <form onSubmit={handleOrderSubmit}>
         <div className="row">
           <div className="col-lg-8">
             <div className="card mb-4">
@@ -122,20 +159,31 @@ function Checkout() {
             <div className="card">
               <div className="card-header d-flex justify-content-between align-items-center">
                 <h5 className="mb-0">Order Summary</h5>
-                <span className="badge bg-primary">XX items</span>
+                <span className="badge bg-primary">{totalQuantity} items</span>
               </div>
               <div className="card-body">
                 <div className="mb-3">
-                  <div className="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
-                    <div className="flex-grow-1">
-                      <h6 className="mb-1">NAME</h6>
-                      <small className="text-muted">PRICE each</small>
+                  {items.map((item) => (
+                    <div
+                      key={item.id}
+                      className="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom"
+                    >
+                      <div className="flex-grow-1">
+                        <h6 className="mb-1">{item.name}</h6>
+                        <small className="text-muted">
+                          ${item.price.toFixed(2)} each
+                        </small>
+                      </div>
+                      <div className="text-end">
+                        <div className="fw-bold">
+                          ${(item.price * item.quantity).toFixed(2)}
+                        </div>
+                        <small className="text-muted">
+                          Qty: {item.quantity}
+                        </small>
+                      </div>
                     </div>
-                    <div className="text-end">
-                      <div className="fw-bold">PRICE*QUANTITY</div>
-                      <small className="text-muted">Qty: XX</small>
-                    </div>
-                  </div>
+                  ))}
                 </div>
 
                 <div className="pricing-breakdown">
@@ -147,20 +195,36 @@ function Checkout() {
                   <hr />
                   <div className="d-flex justify-content-between mb-3">
                     <strong className="fs-5">Total:</strong>
-                    <strong className="fs-5 text-success">$TOTAL</strong>
+                    <strong className="fs-5 text-success">
+                      ${totalAmount.toFixed(2)}
+                    </strong>
                   </div>
                 </div>
                 <div className="d-grid gap-2">
-                  <button type="button" className="btn btn-outline-secondary">
+                  <button
+                    type="button"
+                    onClick={() => navigate(ROUTES.CART)}
+                    className="btn btn-outline-secondary"
+                  >
                     Back to Cart
                   </button>
-                  <button type="submit" className="btn btn-success">
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
-                    Processing Order... `Submit Order - $$
+                  <button
+                    type="submit"
+                    className="btn btn-success"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Processing Order...{" "}
+                      </>
+                    ) : (
+                      `Submit Order - $${totalAmount.toFixed(2)}`
+                    )}
                   </button>
                 </div>
               </div>

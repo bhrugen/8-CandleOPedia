@@ -12,7 +12,7 @@ function ProductDetailsModal({ isOpen, onClose, product }) {
       <div className="modal-dialog modal-lg modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">NAME</h5>
+            <h5 className="modal-title">{product.name}</h5>
             <button
               type="button"
               className="btn-close"
@@ -25,37 +25,50 @@ function ProductDetailsModal({ isOpen, onClose, product }) {
               <div className="col-md-6">
                 <div className="position-relative mb-3">
                   <img
-                    src="https://placehold.co/800x600"
+                    src={product.imageUrl || "https://placehold.co/800x600"}
                     className="img-fluid rounded w-100"
                   />
-                  <span className="badge bg-warning position-absolute top-0 start-0 m-2 ">
-                    <i className="bi bi-exclamation-triangle-fill me-1"></i>
-                    Low Stock
-                  </span>
+
+                  {product.stock <= 10 && (
+                    <span className="badge bg-warning position-absolute top-0 start-0 m-2 ">
+                      <i className="bi bi-exclamation-triangle-fill me-1"></i>
+                      Low Stock
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="mb-3">
                   <div className="d-flex flex-wrap gap-2 mb-3">
-                    <span className="badge bg-transparent border border-success text-success fw-semibold px-3 py-1 rounded-pill">
-                      FLAVOR
-                    </span>
+                    {product.flavor.split(",").map((flavor, index) => (
+                      <span
+                        key={index}
+                        className="badge bg-secondary  border px-2 py-1 rounded-pill"
+                      >
+                        <i className="bi bi-tag me-1"></i>
+                        {flavor.trim()}
+                      </span>
+                    ))}
                   </div>
                   <div className="mb-3">
                     <span className="badge fw-medium px-3 py-1 rounded-pill">
-                      Size
+                      {product.size}
                     </span>
                   </div>
-                  <h3 className="text-success mb-3">PRICE</h3>
+                  <h3 className="text-success mb-3">
+                    ${product.price.toFixed(2)}
+                  </h3>
 
                   <div className="mb-3">
                     <strong>Stock Available: </strong>
-                    <span className={`badge bg-success`}>XX units</span>
+                    <span className={`badge bg-success`}>
+                      {product.stock} units
+                    </span>
                   </div>
 
                   <div className="mb-4">
                     <h6>Description</h6>
-                    <p className="text-muted">DESC</p>
+                    <p className="text-muted">{product.description}</p>
                   </div>
 
                   <div className="d-grid gap-2">

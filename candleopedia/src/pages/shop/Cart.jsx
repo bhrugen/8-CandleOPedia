@@ -2,13 +2,30 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../utility/constants";
-
+import {
+  removeFromCart,
+  updateCart,
+  clearCart,
+} from "../../store/slice/cartSlice";
 function Cart() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleQuantityChange = (id, newQuantity) => {
     //update func
+    if (newQuantity > 0) {
+      dispatch(updateCart({ id, newQuantity }));
+    } else {
+      handleRemoveItem(id);
+    }
+  };
+
+  const handleRemoveItem = (id) => {
+    dispatch(removeFromCart(id));
+  };
+
+  const handleClearCart = (id) => {
+    dispatch(clearCart());
   };
 
   const { items, totalQuantity, totalAmount } = useSelector(
@@ -19,7 +36,9 @@ function Cart() {
     <div className="container py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>Shopping Cart ({totalQuantity} items)</h2>
-        <button className="btn btn-outline-danger">Clear Cart</button>
+        <button className="btn btn-outline-danger" onClick={handleClearCart}>
+          Clear Cart
+        </button>
       </div>
 
       <div className="row">
@@ -107,7 +126,10 @@ function Cart() {
                             </td>
                             <td> ${(item.price * item.quantity).toFixed(2)}</td>
                             <td>
-                              <button className="btn btn-outline-danger btn-sm">
+                              <button
+                                className="btn btn-outline-danger btn-sm"
+                                onClick={() => handleRemoveItem(item.id)}
+                              >
                                 <i className="bi bi-trash"></i>
                               </button>
                             </td>

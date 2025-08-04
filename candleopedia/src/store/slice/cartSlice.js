@@ -36,6 +36,7 @@ const cartSlice = createSlice({
       saveToLocalStorage(state);
     },
     updateCart: (state, action) => {
+      console.log(action.payload);
       const { id, quantity } = action.payload;
       const existingItem = state.items.find((item) => item.id === id);
 

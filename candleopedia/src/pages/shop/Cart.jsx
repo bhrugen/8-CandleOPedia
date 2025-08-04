@@ -1,8 +1,18 @@
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 function Cart() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { items, totalQuantity, totalAmount } = useSelector(
+    (state) => state.cart
+  );
+
   return (
     <div className="container py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Shopping Cart (XX items)</h2>
+        <h2>Shopping Cart ({totalQuantity} items)</h2>
         <button className="btn btn-outline-danger">Clear Cart</button>
       </div>
 

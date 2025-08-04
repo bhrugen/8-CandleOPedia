@@ -1,9 +1,48 @@
+import { useEffect } from "react";
 import Footer from "./components/layout/Footer";
 import Header from "./components/layout/Header";
 import AppRoutes from "./router/router";
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "./services/firebase";
+import { setUser } from "./store/slice/authSlice";
+import { doc, getDoc } from "firebase/firestore";
+
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const userDocRef = doc(db, "users", user.uid);
+          const userDoc = await getDoc(userDocRef);
+
+          let userData;
+          if (userDoc.exists()) {
+            userData = userDoc.data();
+            // Ensure the uid is included in the userData
+            userData.uid = user.uid;
+          } else {
+            userData = {
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+              role: "customer",
+            };
+          }
+          dispatch(setUser(userData));
+        } catch (error) {
+          console.error("Error loading user data:", error);
+          dispatch(setUser(null));
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [dispatch]);
+
   return (
     <BrowserRouter>
       <div

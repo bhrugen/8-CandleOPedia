@@ -1,4 +1,15 @@
+import { addToCart } from "../../store/slice/cartSlice";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+
 function ProductCard({ product, onQuickView }) {
+  const dispatch = useDispatch();
+
+  const handleAddToCart = () => {
+    dispatch(addToCart({ product, quantity: 1 }));
+    toast.success(`${product.name} has been added to the cart!`);
+  };
+
   return (
     <div
       className="card product-card h-100 border shadow rounded-3 overflow-hidden clickable"
@@ -69,6 +80,7 @@ function ProductCard({ product, onQuickView }) {
 
         <div className="mt-auto">
           <button
+            onClick={handleAddToCart}
             className={`btn w-100 fw-semibold py-3 rounded-3 shadow-sm btn-success`}
           >
             <i className={`bi bi-bag-plus me-2`}></i>

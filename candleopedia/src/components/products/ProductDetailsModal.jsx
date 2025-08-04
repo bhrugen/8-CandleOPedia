@@ -1,4 +1,16 @@
+import { addToCart } from "../../store/slice/cartSlice";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+
 function ProductDetailsModal({ isOpen, onClose, product }) {
+  const dispatch = useDispatch();
+
+  const handleAddToCart = () => {
+    dispatch(addToCart({ product, quantity: 1 }));
+    toast.success(`${product.name} has been added to the cart!`);
+    onClose();
+  };
+
   if (!isOpen || !product) {
     return null;
   }
@@ -72,7 +84,10 @@ function ProductDetailsModal({ isOpen, onClose, product }) {
                   </div>
 
                   <div className="d-grid gap-2">
-                    <button className={`btn btn-lg btn-success`}>
+                    <button
+                      className={`btn btn-lg btn-success`}
+                      onClick={handleAddToCart}
+                    >
                       <i className={`bi bi-cart-plus me-2`}></i>
                       Add to Cart
                     </button>

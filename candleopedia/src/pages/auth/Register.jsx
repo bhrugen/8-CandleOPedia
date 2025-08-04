@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useRegisterUserMutation } from "../../store/api/authApi";
 import { ROUTES } from "../../utility/constants";
+import { setUser } from "../../store/slice/authSlice";
 function Register() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -61,6 +62,7 @@ function Register() {
 
       //registeration
       const result = await registerUser(formData).unwrap();
+      dispatch(setUser(result));
       console.log(result);
     } catch (error) {
       toast.error(error);

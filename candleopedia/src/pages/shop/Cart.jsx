@@ -14,14 +14,14 @@ function Cart() {
   const handleQuantityChange = (id, newQuantity) => {
     //update func
     if (newQuantity > 0) {
-      dispatch(updateCart({ id, newQuantity }));
+      dispatch(updateCart({ id, quantity: parseInt(newQuantity) }));
     } else {
       handleRemoveItem(id);
     }
   };
 
   const handleRemoveItem = (id) => {
-    dispatch(removeFromCart(id));
+    dispatch(removeFromCart({ id }));
   };
 
   const handleClearCart = (id) => {
@@ -79,7 +79,7 @@ function Cart() {
                       </thead>
                       <tbody>
                         {items.map((item) => (
-                          <tr>
+                          <tr key={item.id}>
                             <td>
                               <div className="d-flex align-items-center">
                                 <img

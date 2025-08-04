@@ -36,25 +36,24 @@ const cartSlice = createSlice({
       saveToLocalStorage(state);
     },
     updateCart: (state, action) => {
-      console.log(action.payload);
       const { id, quantity } = action.payload;
       const existingItem = state.items.find((item) => item.id === id);
 
       if (existingItem && quantity > 0) {
         const quantityDiff = quantity - existingItem.quantity;
         state.totalQuantity += quantityDiff;
-        state.totalAmount += product.price * quantityDiff;
-        existingItem.quantity += quantity;
+        state.totalAmount += existingItem.price * quantityDiff;
+        existingItem.quantity = quantity;
       }
       saveToLocalStorage(state);
     },
     removeFromCart: (state, action) => {
       const { id } = action.payload;
       const existingItem = state.items.find((item) => item.id === id);
-
+      console.log(existingItem);
       if (existingItem) {
         state.totalQuantity -= existingItem.quantity;
-        state.totalAmount -= product.price * existingItem.quantity;
+        state.totalAmount -= existingItem.price * existingItem.quantity;
         state.items = state.items.filter((item) => item.id != id);
       }
       saveToLocalStorage(state);

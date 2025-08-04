@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useRegisterUserMutation } from "../../store/api/authApi";
+import { ROUTES } from "../../utility/constants";
 function Register() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -62,8 +63,7 @@ function Register() {
       const result = await registerUser(formData).unwrap();
       console.log(result);
     } catch (error) {
-      console.log(error);
-      toast.error("Error encountered:", error);
+      toast.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -164,12 +164,12 @@ function Register() {
                   <div className="text-center">
                     <p className="mb-0 text-muted">
                       Already have an account?
-                      <a
-                        href="#"
+                      <Link
+                        to={ROUTES.LOGIN}
                         className="text-success fw-semibold text-decoration-none"
                       >
                         Sign in here
-                      </a>
+                      </Link>
                     </p>
                   </div>
                 </form>

@@ -1,7 +1,8 @@
 import { ROUTES } from "../../utility/constants";
 import { Link } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 function Header() {
+  const cartItems = useSelector((state) => state.cart.totalQuantity);
   return (
     <nav className="navbar navbar-expand-sm pt-3 border-bottom shadow-sm">
       <div className="container">
@@ -44,7 +45,7 @@ function Header() {
               >
                 <i className="bi bi-bag me-2"></i>Cart
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  0
+                  {cartItems}
                 </span>
               </Link>
             </li>

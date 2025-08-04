@@ -171,7 +171,10 @@ function Cart() {
                     <strong>${totalAmount.toFixed(2)}</strong>
                   </div>
 
-                  <button className="btn btn-success w-100">
+                  <button
+                    className="btn btn-success w-100"
+                    onClick={() => navigate(ROUTES.CHECKOUT)}
+                  >
                     Proceed to Checkout
                   </button>
                 </div>

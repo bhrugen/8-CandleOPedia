@@ -99,7 +99,7 @@ function Header() {
                   aria-expanded="false"
                 >
                   <i className="bi bi-person me-1"></i>
-                  User
+                  {user?.displayName || user?.email}
                 </button>
                 <ul
                   className="dropdown-menu dropdown-menu-end"

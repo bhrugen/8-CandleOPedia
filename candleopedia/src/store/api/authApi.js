@@ -57,7 +57,20 @@ export const authApi = baseApi.injectEndpoints({
         }
       },
     }),
+
+    logoutUser: builder.mutation({
+      async queryFn() {
+        try {
+          await signOut(auth);
+          return {
+            data: null,
+          };
+        } catch (error) {
+          return { error: error.message };
+        }
+      },
+    }),
   }),
 });
 
-export const { useRegisterUserMutation } = authApi;
+export const { useRegisterUserMutation, useLogoutUserMutation } = authApi;

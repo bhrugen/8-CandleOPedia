@@ -37,6 +37,8 @@ function App() {
           console.error("Error loading user data:", error);
           dispatch(setUser(null));
         }
+      } else {
+        dispatch(setUser(null));
       }
     });
 

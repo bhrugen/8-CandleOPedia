@@ -1,11 +1,28 @@
 import { ROUTES } from "../../utility/constants";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { clearUser } from "../../store/slice/authSlice";
+import { useLogoutUserMutation } from "../../store/api/authApi";
 function Header() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.totalQuantity);
   const { isAuthenticated, isInitialized, isAdmin, user } = useSelector(
     (state) => state.auth
   );
+  const [logoutUser] = useLogoutUserMutation();
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      navigate(ROUTES.HOME);
+    } catch (error) {
+      dispatch(clearUser());
+      navigate(ROUTES.HOME);
+    }
+  };
+
   return (
     <nav className="navbar navbar-expand-sm pt-3 border-bottom shadow-sm">
       <div className="container">
@@ -114,7 +131,7 @@ function Header() {
                     <hr className="dropdown-divider" />
                   </li>
                   <li>
-                    <button className="dropdown-item">
+                    <button className="dropdown-item" onClick={handleLogout}>
                       <i className="bi bi-box-arrow-right me-2"></i>
                       Logout
                     </button>

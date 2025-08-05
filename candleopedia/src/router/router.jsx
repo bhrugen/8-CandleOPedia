@@ -13,8 +13,22 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path={ROUTES.HOME} element={<Home />} />
-      <Route path={ROUTES.CART} element={<Cart />} />
-      <Route path={ROUTES.CHECKOUT} element={<Checkout />} />
+      <Route
+        path={ROUTES.CART}
+        element={
+          <RoleBasedRoutes>
+            <Cart />
+          </RoleBasedRoutes>
+        }
+      />
+      <Route
+        path={ROUTES.CHECKOUT}
+        element={
+          <RoleBasedRoutes>
+            <Checkout />
+          </RoleBasedRoutes>
+        }
+      />
       <Route path={ROUTES.LOGIN} element={<Login />} />
       <Route path={ROUTES.REGISTER} element={<Register />} />
       <Route

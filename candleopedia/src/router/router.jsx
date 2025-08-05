@@ -39,7 +39,15 @@ const AppRoutes = () => {
           </RoleBasedRoutes>
         }
       />
-      <Route path={ROUTES.ADMIN.ORDERS} element={<OrderManagement />} />
+      <Route
+        path={ROUTES.ADMIN.ORDERS}
+        element={
+          <RoleBasedRoutes allowedRoles={[ROLES.ADMIN, "SuperAdmin"]}>
+            <OrderManagement />
+          </RoleBasedRoutes>
+        }
+      />
+
       <Route path={ROUTES.MY_ORDER} element={<MyOrders />} />
     </Routes>
   );

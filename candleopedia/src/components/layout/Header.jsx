@@ -115,21 +115,32 @@ function Header() {
                   <li>
                     <hr className="dropdown-divider" />
                   </li>
-                  <li>
-                    <Link className="dropdown-item" to={ROUTES.ADMIN.PRODUCTS}>
-                      <i className="bi bi-box me-2"></i>
-                      Manage Products
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" to={ROUTES.ADMIN.ORDERS}>
-                      <i className="bi bi-clipboard-data me-2"></i>
-                      Manage Orders
-                    </Link>
-                  </li>
-                  <li>
-                    <hr className="dropdown-divider" />
-                  </li>
+                  {isAdmin && (
+                    <>
+                      <li>
+                        <Link
+                          className="dropdown-item"
+                          to={ROUTES.ADMIN.PRODUCTS}
+                        >
+                          <i className="bi bi-box me-2"></i>
+                          Manage Products
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="dropdown-item"
+                          to={ROUTES.ADMIN.ORDERS}
+                        >
+                          <i className="bi bi-clipboard-data me-2"></i>
+                          Manage Orders
+                        </Link>
+                      </li>
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
+                    </>
+                  )}
+
                   <li>
                     <button className="dropdown-item" onClick={handleLogout}>
                       <i className="bi bi-box-arrow-right me-2"></i>

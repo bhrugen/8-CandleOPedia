@@ -8,6 +8,7 @@ import {
   query,
   doc,
   setDoc,
+  getDoc,
 } from "firebase/firestore";
 import {
   createUserWithEmailAndPassword,
@@ -58,6 +59,30 @@ export const authApi = baseApi.injectEndpoints({
       },
     }),
 
+    loginUser: builder.mutation({
+      async queryFn({ email, password }) {
+        try {
+          const userCredentials = await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+          const user = userCredentials.user;
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          const userData = userDoc.exists()
+            ? userDoc.data()
+            : createUserData(user, "customer");
+
+          return {
+            data: userData,
+          };
+        } catch (error) {
+          return { error: error.message };
+        }
+      },
+    }),
+
     logoutUser: builder.mutation({
       async queryFn() {
         try {
@@ -73,4 +98,8 @@ export const authApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useRegisterUserMutation, useLogoutUserMutation } = authApi;
+export const {
+  useRegisterUserMutation,
+  useLogoutUserMutation,
+  useLoginUserMutation,
+} = authApi;

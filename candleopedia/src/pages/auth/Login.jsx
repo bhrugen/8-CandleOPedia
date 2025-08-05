@@ -1,4 +1,38 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { useLoginUserMutation } from "../../store/api/authApi";
+import { ROUTES } from "../../utility/constants";
+import { setUser } from "../../store/slice/authSlice";
 function Login() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [loginUser] = useLoginUserMutation();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
+  };
   return (
     <div className="pt-5 d-flex align-items-center">
       <div className="container">

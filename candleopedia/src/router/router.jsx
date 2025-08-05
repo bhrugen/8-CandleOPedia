@@ -20,7 +20,7 @@ const AppRoutes = () => {
       <Route
         path={ROUTES.ADMIN.PRODUCTS}
         element={
-          <RoleBasedRoutes allowedRoles={[ROLES.ADMIN]}>
+          <RoleBasedRoutes allowedRoles={[ROLES.ADMIN, "SuperAdmin"]}>
             <ProductManagement />
           </RoleBasedRoutes>
         }

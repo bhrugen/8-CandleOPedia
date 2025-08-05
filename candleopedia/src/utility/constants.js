@@ -10,3 +10,8 @@ export const ROUTES = {
     ORDERS: "/admin/orders",
   },
 };
+
+export const ROLES = {
+  CUSTOMER: "customer",
+  ADMIN: "admin",
+};

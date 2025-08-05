@@ -33,6 +33,39 @@ function Login() {
       }));
     }
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const newErrors = {};
+
+      if (!formData.email.trim()) {
+        newErrors.email = "Email is required";
+      }
+      if (!formData.password.trim()) {
+        newErrors.password = "Password is required";
+      }
+
+      setErrors(newErrors);
+
+      if (Object.keys(newErrors).length > 0) {
+        setIsLoading(false);
+        return;
+      }
+
+      //valid
+
+      //registeration
+      const result = await loginUser(formData).unwrap();
+      console.log(result);
+      navigate(ROUTES.HOME);
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <div className="pt-5 d-flex align-items-center">
       <div className="container">
@@ -50,23 +83,16 @@ function Login() {
                   <h1 className="h3 mb-2 fw-bold">Welcome Back!</h1>
                   <p className="text-muted">Sign in to your account</p>
                 </div>
-                <div
-                  className="alert alert-danger alert-dismissible fade show"
-                  role="alert"
-                >
-                  <i className="bi bi-exclamation-triangle-fill me-2"></i>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    aria-label="Close"
-                  ></button>
-                </div>
 
-                <form>
+                <form onSubmit={handleSubmit}>
                   <div className="form-floating mb-3">
                     <input
                       type="email"
-                      className={`form-control is-invalid`}
+                      className={`form-control ${
+                        errors.email ? "is-invalid" : ""
+                      }`}
+                      value={formData.email}
+                      onChange={handleInputChange}
                       id="email"
                       name="email"
                       placeholder="name@example.com"
@@ -74,13 +100,17 @@ function Login() {
                     <label htmlFor="email">
                       <i className="bi bi-envelope me-2"></i>Email Address
                     </label>
-                    <div className="invalid-feedback">ERROR</div>
+                    <div className="invalid-feedback">{errors.email}</div>
                   </div>
 
                   <div className="form-floating mb-4">
                     <input
                       type="password"
-                      className={`form-control is-invalid`}
+                      className={`form-control ${
+                        errors.password ? "is-invalid" : ""
+                      }`}
+                      value={formData.password}
+                      onChange={handleInputChange}
                       id="password"
                       name="password"
                       placeholder="Password"
@@ -88,32 +118,40 @@ function Login() {
                     <label htmlFor="password">
                       <i className="bi bi-lock me-2"></i>Password
                     </label>
-                    <div className="invalid-feedback">ERROR</div>
+                    <div className="invalid-feedback">{errors.password}</div>
                   </div>
 
                   <button
                     type="submit"
                     className="btn btn-success w-100 mb-4 py-3"
                   >
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
-                    Signing In...
-                    <i className="bi bi-box-arrow-in-right me-2"></i>
-                    Sign In
+                    {isLoading ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Signing In...
+                      </>
+                    ) : (
+                      <>
+                        {" "}
+                        <i className="bi bi-box-arrow-in-right me-2"></i>
+                        Sign In
+                      </>
+                    )}
                   </button>
 
                   <div className="text-center">
                     <p className="mb-0 text-muted">
                       Don't have an account?{" "}
-                      <a
-                        href="#"
+                      <Link
+                        to={ROUTES.REGISTER}
                         className="text-success fw-semibold text-decoration-none"
                       >
                         Create account
-                      </a>
+                      </Link>
                     </p>
                   </div>
                 </form>

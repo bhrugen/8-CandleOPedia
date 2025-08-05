@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -7,6 +8,7 @@ import { ROUTES } from "../../utility/constants";
 import { setUser } from "../../store/slice/authSlice";
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const [loginUser] = useLoginUserMutation();
   const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +61,9 @@ function Login() {
       //registeration
       const result = await loginUser(formData).unwrap();
       console.log(result);
-      navigate(ROUTES.HOME);
+
+      const from = location.state?.from?.pathname || ROUTES.HOME;
+      navigate(from);
     } catch (error) {
       toast.error(error);
     } finally {

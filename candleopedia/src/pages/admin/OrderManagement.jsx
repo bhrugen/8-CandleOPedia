@@ -5,43 +5,37 @@ import { toast } from "react-toastify";
 function OrderManagement() {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [editingProduct, setEditingProduct] = useState(null);
+  const [orderSelected, setOrderSelected] = useState(null);
 
   const {
-    data: products = [],
+    data: orders = [],
     isLoading,
     isError,
     error,
-  } = useGetProductsQuery();
-
-  const [deleteProduct] = useDeleteProductMutation();
+  } = useGetAllOrdersQuery();
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setEditingProduct(null);
+    setOrderSelected(null);
   };
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleEditProduct = (product) => {
+  const handleEditOrder = (order) => {
     setShowModal(true);
-    setEditingProduct(product);
-    console.log(product);
+    setOrderSelected(order);
+    console.log(order);
   };
 
-  const handleDeleteProduct = async (product) => {
-    await deleteProduct(product.id);
-    toast.success(`${product.name} deleted successfully`);
-  };
-
-  const filteredProducts = products.filter((product) => {
+  const filteredOrders = orders.filter((order) => {
     const searchLower = searchTerm.toLowerCase();
     return (
-      product.name?.toLowerCase().includes(searchLower) ||
-      product.flavor?.toLowerCase().includes(searchLower) ||
-      product.description?.toLowerCase().includes(searchLower)
+      order.id?.toLowerCase().includes(searchLower) ||
+      order.shippingInfo?.firstName?.toLowerCase().includes(searchLower) ||
+      order.shippingInfo?.lastName?.toLowerCase().includes(searchLower) ||
+      order.shippingInfo?.email?.toLowerCase().includes(searchLower)
     );
   });
 
@@ -55,10 +49,10 @@ function OrderManagement() {
                 <div>
                   <h1 className="display-6 fw-bold text-success mb-2">
                     <i className="bi bi-boxes me-3"></i>
-                    Product Management
+                    Order Management
                   </h1>
                   <p className="text-muted mb-0">
-                    Manage your product inventory with ease
+                    Manage your order's with ease
                   </p>
                 </div>
                 <nav aria-label="breadcrumb">
@@ -72,7 +66,7 @@ function OrderManagement() {
                       className="breadcrumb-item active fw-medium"
                       aria-current="page"
                     >
-                      Products
+                      Orders
                     </li>
                   </ol>
                 </nav>
@@ -90,7 +84,7 @@ function OrderManagement() {
                       <input
                         type="text"
                         className="form-control border-start-0 ps-0"
-                        placeholder="Search products by name or flavor..."
+                        placeholder="Search order..."
                         value={searchTerm}
                         onChange={handleSearchChange}
                       />
@@ -106,15 +100,6 @@ function OrderManagement() {
                       )}
                     </div>
                   </div>
-                  <div className="col-md-4 text-end mt-3 mt-md-0">
-                    <button
-                      className="btn btn-success px-4 py-2 shadow-sm"
-                      onClick={() => setShowModal(true)}
-                    >
-                      <i className="bi bi-plus-circle me-2"></i>
-                      Add New Product
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -126,45 +111,28 @@ function OrderManagement() {
                     <div className="spinner-border text-success" role="status">
                       <span className="visually-hidden">Loading...</span>
                     </div>
-                    <p className="mt-3 text-muted">Loading products...</p>
+                    <p className="mt-3 text-muted">Loading orders...</p>
                   </div>
                 ) : isError ? (
                   <div className="text-center py-5">
                     <div className="alert alert-danger" role="alert">
                       <i className="bi bi-exclamation-triangle me-2"></i>
-                      Error loading products:
+                      Error loading orders:
                     </div>
                   </div>
-                ) : filteredProducts.length == 0 ? (
+                ) : filteredOrders.length == 0 ? (
                   <div className="text-center py-5">
                     <i className="bi bi-box-seam fs-1 text-muted mb-3 d-block"></i>
-                    <h5 className="text-muted mb-2">No products found</h5>
-                    <p className="text-muted mb-3">
-                      Start by adding your first product
-                    </p>
-                    <button
-                      className="btn btn-success"
-                      onClick={() => setShowModal(true)}
-                    >
-                      <i className="bi bi-plus-circle me-2"></i>
-                      Add Product
-                    </button>
+                    <h5 className="text-muted mb-2">No orders found</h5>
+                    <p className="text-muted mb-3">No orders found</p>
                   </div>
                 ) : (
                   <div>
-                    <ProductTable
-                      products={filteredProducts}
-                      onEditProduct={handleEditProduct}
-                      onDeleteProduct={handleDeleteProduct}
+                    <OrderTable
+                      orders={filteredOrders}
+                      onViewOrder={handleEditOrder}
                     />
                   </div>
-                )}
-
-                {showModal && (
-                  <ProductForm
-                    onClose={handleCloseModal}
-                    editingProduct={editingProduct}
-                  />
                 )}
               </div>
             </div>

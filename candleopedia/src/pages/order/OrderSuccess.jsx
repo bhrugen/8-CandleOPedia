@@ -34,7 +34,7 @@ function OrderSuccess() {
                 order.
               </p>
               <div className="d-flex justify-content-center gap-3">
-                <Link href={ROUTES.MY_ORDER} className="btn btn-primary">
+                <Link to={ROUTES.MY_ORDER} className="btn btn-primary">
                   <i className="bi bi-bag me-2"></i>View Orders
                 </Link>
                 <Link to={ROUTES.HOME} className="btn btn-outline-primary">

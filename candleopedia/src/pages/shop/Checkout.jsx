@@ -3,15 +3,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../utility/constants";
-
+import { useCreateOrderMutation } from "../../store/api/ordersApi";
 function Checkout() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [createOrder] = useCreateOrderMutation();
   const { items, totalQuantity, totalAmount } = useSelector(
     (state) => state.cart
   );
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
 
-  const handleOrderSubmit = (e) => {
+  const handleOrderSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     const formData = new FormData(e.target);
@@ -28,6 +30,18 @@ function Checkout() {
         zipCode: formData.get("zipCode"),
       };
 
+      const orderData = {
+        items,
+        shippingInfo,
+        totalAmount,
+        userId: isAuthenticated ? user.id : null,
+        userEmail: isAuthenticated ? user.email : null,
+        totalItems: totalQuantity,
+      };
+
+      const result = await createOrder(orderData).unwrap();
+      console.log(result);
+      navigate(ROUTES.ORDER_SUCCESS, { state: { orderId: result.id } });
       //place order
     } catch (error) {
       console.error("Order submission error:", error);

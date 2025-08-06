@@ -9,6 +9,7 @@ import ProductManagement from "../pages/admin/ProductManagement";
 import OrderManagement from "../pages/admin/OrderManagement";
 import MyOrders from "../pages/order/MyOrders";
 import RoleBasedRoutes from "./RoleBasedRoutes";
+import OrderSuccess from "../pages/order/OrderSuccess";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -30,6 +31,7 @@ const AppRoutes = () => {
         }
       />
       <Route path={ROUTES.LOGIN} element={<Login />} />
+      <Route path={ROUTES.ORDER_SUCCESS} element={<OrderSuccess />} />
       <Route path={ROUTES.REGISTER} element={<Register />} />
       <Route
         path={ROUTES.ADMIN.PRODUCTS}

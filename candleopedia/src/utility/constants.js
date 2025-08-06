@@ -9,6 +9,7 @@ export const ROUTES = {
     PRODUCTS: "/admin/products",
     ORDERS: "/admin/orders",
   },
+  ORDER_SUCCESS: "/order-success",
 };
 
 export const ROLES = {

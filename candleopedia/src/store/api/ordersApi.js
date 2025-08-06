@@ -14,25 +14,53 @@ import { ORDER_STATUS } from "../../utility/constants";
 
 export const ordersApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getProducts: builder.query({
-      async queryFn() {
+    getAllOrders: builder.query({
+      async queryFn(_, { getState }) {
         try {
+          const { auth } = getState();
+          if (!auth.isAdmin) {
+            throw new Error("Only admin users can perform this action");
+          }
           const q = query(
-            collection(db, "products"),
+            collection(db, "orders"),
             orderBy("createdAt", "desc")
           );
           const querySnapshot = await getDocs(q);
-          const products = [];
+          const orders = [];
           querySnapshot.forEach((doc) => {
-            products.push({ id: doc.id, ...doc.data() });
+            orders.push({ id: doc.id, ...doc.data() });
           });
-          console.log(products);
-          return { data: products };
+          console.log(orders);
+          return { data: orders };
         } catch (error) {
           return { error: error.message };
         }
       },
-      providesTags: ["Product"],
+      providesTags: ["Order"],
+    }),
+    getUserOrders: builder.query({
+      async queryFn(_, { getState }) {
+        try {
+          const { auth } = getState();
+          if (!auth?.user?.uid) {
+            throw new Error("User not authenticated");
+          }
+          const q = query(
+            collection(db, "orders"),
+            where("userId", "==", auth.user.uid)
+          );
+          const querySnapshot = await getDocs(q);
+          const orders = [];
+          querySnapshot.forEach((doc) => {
+            orders.push({ id: doc.id, ...doc.data() });
+          });
+          console.log(orders);
+          return { data: orders };
+        } catch (error) {
+          return { error: error.message };
+        }
+      },
+      providesTags: ["Order"],
     }),
 
     createOrder: builder.mutation({
@@ -66,47 +94,33 @@ export const ordersApi = baseApi.injectEndpoints({
       invalidatesTags: ["Order"],
     }),
 
-    updateProduct: builder.mutation({
-      async queryFn({ id, ...productData }) {
+    updateOrder: builder.mutation({
+      async queryFn({ orderId, orderData }, { getState }) {
         try {
-          const updateData = {
-            ...productData,
-          };
-          await updateDoc(doc(db, "products", id), updateData);
-          return {
-            data: {
-              id,
-              ...productData,
-            },
-          };
-        } catch (error) {
-          return { error: error.message };
-        }
-      },
-      invalidatesTags: ["Product"],
-    }),
+          const { auth } = getState();
+          if (!auth.isAdmin) {
+            throw new Error("Only admin users can perform this action");
+          }
 
-    deleteProduct: builder.mutation({
-      async queryFn(id) {
-        try {
-          await deleteDoc(doc(db, "products", id));
+          await updateDoc(doc(db, "orders", orderId), orderData);
           return {
             data: {
               id,
+              ...orderData,
             },
           };
         } catch (error) {
           return { error: error.message };
         }
       },
-      invalidatesTags: ["Product"],
+      invalidatesTags: ["Order"],
     }),
   }),
 });
 
 export const {
-  useAddProductMutation,
-  useUpdateProductMutation,
-  useGetProductsQuery,
-  useDeleteProductMutation,
+  useCreateOrderMutation,
+  useUpdateOrderMutation,
+  useGetUserOrdersQuery,
+  useGetAllOrdersQuery,
 } = ordersApi;

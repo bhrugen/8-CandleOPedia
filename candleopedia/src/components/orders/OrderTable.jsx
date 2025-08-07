@@ -1,3 +1,4 @@
+import { ORDER_STATUS } from "../../utility/constants";
 function OrderTable({ orders = [], onViewOrder }) {
   return (
     <div className="card border-0 shadow-sm">
@@ -70,7 +71,21 @@ function OrderTable({ orders = [], onViewOrder }) {
                     </span>
                   </td>
                   <td className="py-3">
-                    <span className={`badge px-3 py-2 rounded-pill bg-warning`}>
+                    <span
+                      className={`badge px-3 py-2 rounded-pill ${
+                        order.status == ORDER_STATUS.PENDING
+                          ? "bg-warning"
+                          : order.status == ORDER_STATUS.CONFIRMED
+                          ? "bg-info"
+                          : order.status == ORDER_STATUS.SHIPPED
+                          ? "bg-primary"
+                          : order.status == ORDER_STATUS.DELIVERED
+                          ? "bg-success"
+                          : order.status == ORDER_STATUS.CANCELLED
+                          ? "bg-danger"
+                          : "bg-secondary"
+                      }`}
+                    >
                       <i className="bi bi-boxes me-1"></i>
                       {order.status}
                     </span>

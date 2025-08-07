@@ -2,6 +2,7 @@ import OrderTable from "../../components/orders/OrderTable";
 import { useState } from "react";
 import { useGetAllOrdersQuery } from "../../store/api/ordersApi";
 import { toast } from "react-toastify";
+import OrderDetails from "../../components/orders/OrderDetails";
 function OrderManagement() {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -134,6 +135,8 @@ function OrderManagement() {
                     />
                   </div>
                 )}
+
+                <OrderDetails />
               </div>
             </div>
           </div>

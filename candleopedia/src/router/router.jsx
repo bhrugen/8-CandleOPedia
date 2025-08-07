@@ -50,7 +50,14 @@ const AppRoutes = () => {
         }
       />
 
-      <Route path={ROUTES.MY_ORDER} element={<MyOrders />} />
+      <Route
+        path={ROUTES.MY_ORDER}
+        element={
+          <RoleBasedRoutes>
+            <MyOrders />
+          </RoleBasedRoutes>
+        }
+      />
     </Routes>
   );
 };

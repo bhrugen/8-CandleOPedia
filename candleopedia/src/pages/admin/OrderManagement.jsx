@@ -1,9 +1,16 @@
 import OrderTable from "../../components/orders/OrderTable";
 import { useState } from "react";
-import { useGetAllOrdersQuery } from "../../store/api/ordersApi";
+import {
+  useGetAllOrdersQuery,
+  useGetUserOrdersQuery,
+} from "../../store/api/ordersApi";
 import { toast } from "react-toastify";
 import OrderDetails from "../../components/orders/OrderDetails";
-function OrderManagement() {
+function OrderManagement({
+  isCustomerView = false,
+  title = "Order Management",
+  subtitle = "Manage and track customer orders",
+}) {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [orderSelected, setOrderSelected] = useState(null);
@@ -13,7 +20,7 @@ function OrderManagement() {
     isLoading,
     isError,
     error,
-  } = useGetAllOrdersQuery();
+  } = isCustomerView ? useGetUserOrdersQuery() : useGetAllOrdersQuery();
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -50,11 +57,9 @@ function OrderManagement() {
                 <div>
                   <h1 className="display-6 fw-bold text-success mb-2">
                     <i className="bi bi-boxes me-3"></i>
-                    Order Management
+                    {title}
                   </h1>
-                  <p className="text-muted mb-0">
-                    Manage your order's with ease
-                  </p>
+                  <p className="text-muted mb-0">{subtitle}</p>
                 </div>
                 <nav aria-label="breadcrumb">
                   <ol className="breadcrumb mb-0  rounded-pill px-3 py-2 shadow-sm">

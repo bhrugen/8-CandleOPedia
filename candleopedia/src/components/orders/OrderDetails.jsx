@@ -119,15 +119,15 @@ function OrderDetails({ orderSelected, onClose }) {
                       ) : (
                         <span
                           className={`badge px-3 py-2 rounded-pill ${
-                            order.status == ORDER_STATUS.PENDING
+                            orderSelected.status == ORDER_STATUS.PENDING
                               ? "bg-warning"
-                              : order.status == ORDER_STATUS.CONFIRMED
+                              : orderSelected.status == ORDER_STATUS.CONFIRMED
                               ? "bg-info"
-                              : order.status == ORDER_STATUS.SHIPPED
+                              : orderSelected.status == ORDER_STATUS.SHIPPED
                               ? "bg-primary"
-                              : order.status == ORDER_STATUS.DELIVERED
+                              : orderSelected.status == ORDER_STATUS.DELIVERED
                               ? "bg-success"
-                              : order.status == ORDER_STATUS.CANCELLED
+                              : orderSelected.status == ORDER_STATUS.CANCELLED
                               ? "bg-danger"
                               : "bg-secondary"
                           }`}

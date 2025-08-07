@@ -7,6 +7,7 @@ import {
   getDocs,
   query,
   doc,
+  where,
 } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { baseApi } from "./baseApi";

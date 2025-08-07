@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { baseApi } from "./api/baseApi";
 import cartReducer from "./slice/cartSlice";
 import authReducer from "./slice/authSlice";
-
+import themeReducer from "./slice/themeSlice";
 const loadCartFromStorage = () => {
   try {
     const savedCart = localStorage.getItem("cart_CandleOPedia");
@@ -17,6 +17,7 @@ export const store = configureStore({
     [baseApi.reducerPath]: baseApi.reducer,
     cart: cartReducer,
     auth: authReducer,
+    theme: themeReducer,
   },
   preloadedState: {
     cart: loadCartFromStorage(),

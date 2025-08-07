@@ -12,6 +12,7 @@ import { doc, getDoc } from "firebase/firestore";
 
 function App() {
   const dispatch = useDispatch();
+  const theme = useSelector((state) => state.theme.theme);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -45,16 +46,25 @@ function App() {
     return () => unsubscribe();
   }, [dispatch]);
 
+  const getThemeStyles = () => {
+    if (theme === "dark") {
+      return {
+        background: `linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f4c75 75%, #00d4ff 100%)`,
+        backgroundAttachment: "fixed",
+        color: "#ffffff",
+      };
+    } else {
+      return {
+        background: `linear-gradient(135deg, #a8edea 0%, #fed6e3 25%, #d299c2 50%, #fef9d7 75%, #a8edea 100%)`,
+        backgroundAttachment: "fixed",
+        color: "#2c3e50",
+      };
+    }
+  };
+
   return (
     <BrowserRouter>
-      <div
-        className="d-flex flex-column min-vh-100"
-        style={{
-          background: `linear-gradient(135deg, #a8edea 0%, #fed6e3 25%, #d299c2 50%, #fef9d7 75%, #a8edea 100%)`,
-          backgroundAttachment: "fixed",
-          color: "#2c3e50",
-        }}
-      >
+      <div className="d-flex flex-column min-vh-100" style={getThemeStyles()}>
         <Header />
         <main className="flex-grow-1">
           <AppRoutes />

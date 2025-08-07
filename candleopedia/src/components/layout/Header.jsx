@@ -4,14 +4,20 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clearUser } from "../../store/slice/authSlice";
 import { useLogoutUserMutation } from "../../store/api/authApi";
+import { toggleTheme } from "../../store/slice/themeSlice";
 function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.totalQuantity);
+  const theme = useSelector((state) => state.theme.theme);
   const { isAuthenticated, isInitialized, isAdmin, user } = useSelector(
     (state) => state.auth
   );
   const [logoutUser] = useLogoutUserMutation();
+
+  const handleToggle = () => {
+    dispatch(toggleTheme());
+  };
 
   const handleLogout = async () => {
     try {
@@ -71,8 +77,13 @@ function Header() {
             </li>
 
             <li className="nav-item me-3">
-              <button className="btn btn-outline-secondary rounded-pill px-3">
-                <i className="bi bi-sun"></i>
+              <button
+                className="btn btn-outline-secondary rounded-pill px-3"
+                onClick={handleToggle}
+              >
+                <i
+                  className={`bi ${theme === "dark" ? "bi-sun" : "bi-moon"} `}
+                ></i>
               </button>
             </li>
 

@@ -1,4 +1,4 @@
-function OrderDetails() {
+function OrderDetails({ orderSelected, onClose }) {
   return (
     <div
       className={`modal fade show d-block`}
@@ -19,6 +19,7 @@ function OrderDetails() {
               type="button"
               className="btn-close btn-close-white"
               aria-label="Close"
+              onClick={onClose}
             ></button>
           </div>
           <div className="modal-body p-3">
@@ -195,6 +196,7 @@ function OrderDetails() {
             </form>
             <button
               type="button"
+              onClick={onClose}
               className="btn btn-outline-secondary btn-sm px-4"
             >
               <i className="bi bi-x-circle me-1"></i>

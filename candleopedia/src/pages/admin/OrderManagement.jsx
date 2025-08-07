@@ -135,8 +135,12 @@ function OrderManagement() {
                     />
                   </div>
                 )}
-
-                <OrderDetails />
+                {showModal && orderSelected && (
+                  <OrderDetails
+                    orderSelected={orderSelected}
+                    onClose={handleCloseModal}
+                  />
+                )}
               </div>
             </div>
           </div>

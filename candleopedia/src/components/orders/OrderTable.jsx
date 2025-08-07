@@ -95,7 +95,7 @@ function OrderTable({ orders = [], onViewOrder }) {
                       <button
                         className="btn btn-outline-primary btn-sm px-3"
                         title="Edit Product"
-                        onClick={() => onViewOrder(product)}
+                        onClick={() => onViewOrder(order)}
                       >
                         <i className="bi bi-pencil-square"></i>
                       </button>

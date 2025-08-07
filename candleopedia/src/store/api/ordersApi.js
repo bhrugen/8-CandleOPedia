@@ -105,7 +105,7 @@ export const ordersApi = baseApi.injectEndpoints({
           await updateDoc(doc(db, "orders", orderId), orderData);
           return {
             data: {
-              id,
+              id: orderId,
               ...orderData,
             },
           };

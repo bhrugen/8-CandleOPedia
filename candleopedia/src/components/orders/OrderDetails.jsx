@@ -1,12 +1,15 @@
 import { ORDER_STATUS } from "../../utility/constants";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { useUpdateOrderMutation } from "../../store/api/ordersApi";
 function OrderDetails({ orderSelected, onClose }) {
   const { isAdmin } = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
     status: orderSelected?.status || ORDER_STATUS.PENDING,
     trackingNumber: orderSelected?.trackingNumber || "",
   });
+  const [updateOrder] = useUpdateOrderMutation();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -15,9 +18,13 @@ function OrderDetails({ orderSelected, onClose }) {
 
     try {
       //valid
-      let result;
+      console.log(orderSelected);
+      await updateOrder({
+        orderId: orderSelected.id,
+        orderData: formData,
+      }).unwrap();
+      toast.success("Order updated successfully");
 
-      toast.success("Product created successfully");
       onClose();
     } catch (error) {
       console.log(error);
@@ -272,7 +279,10 @@ function OrderDetails({ orderSelected, onClose }) {
           </div>
           <div className="modal-footer  border-0 p-3">
             {isAdmin ? (
-              <form className="d-flex w-100 justify-content-end gap-2">
+              <form
+                className="d-flex w-100 justify-content-end gap-2"
+                onSubmit={handleSubmit}
+              >
                 <button
                   type="button"
                   onClick={onClose}

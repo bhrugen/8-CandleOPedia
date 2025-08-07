@@ -1,4 +1,43 @@
+import { ORDER_STATUS } from "../../utility/constants";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 function OrderDetails({ orderSelected, onClose }) {
+  const { isAdmin } = useSelector((state) => state.auth);
+  const [formData, setFormData] = useState({
+    status: orderSelected?.status || ORDER_STATUS.PENDING,
+    trackingNumber: orderSelected?.trackingNumber || "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      //valid
+      let result;
+
+      toast.success("Product created successfully");
+      onClose();
+    } catch (error) {
+      console.log(error);
+      toast.error("Error encountered:", error);
+    } finally {
+      setIsLoading(false);
+    }
+
+    //validations
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   return (
     <div
       className={`modal fade show d-block`}

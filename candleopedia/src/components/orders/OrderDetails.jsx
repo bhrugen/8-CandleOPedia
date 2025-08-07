@@ -52,7 +52,9 @@ function OrderDetails({ orderSelected, onClose }) {
             <h5 className="modal-title fw-bold">
               <i className="bi bi-receipt me-2"></i>
               Order Details
-              <span className="badge bg-success ms-2">Admin View</span>
+              {isAdmin && (
+                <span className="badge bg-success ms-2">Admin View</span>
+              )}
             </h5>
             <button
               type="button"
@@ -72,23 +74,60 @@ function OrderDetails({ orderSelected, onClose }) {
                     </h6>
                     <p className="mb-1 small">
                       <strong>Order ID:</strong>
-                      <code className="ms-2  px-2 py-1 rounded small">ID</code>
+                      <code className="ms-2  px-2 py-1 rounded small">
+                        {orderSelected.id}
+                      </code>
                     </p>
                     <p className="mb-1 small">
                       <strong>Date:</strong>
-                      <span className="ms-2"></span>
+                      <span className="ms-2">
+                        <i className="bi bi-calendar me-1"></i>
+                        {new Date(
+                          orderSelected.orderDate || orderSelected.createdAt
+                        ).toLocaleDateString()}
+                        {" " +
+                          new Date(
+                            orderSelected.orderDate || orderSelected.createdAt
+                          ).toLocaleTimeString()}
+                      </span>
                     </p>
                     <div className="mb-0">
                       <strong className="small">Status:</strong>
-                      <select
-                        name="status"
-                        className="form-select form-select-sm d-inline-block ms-2"
-                        style={{ width: "auto" }}
-                        required
-                      >
-                        <option>STATUS</option>
-                      </select>
-                      <span className={`ms-2 badge `}>STATUS</span>
+                      {isAdmin ? (
+                        <select
+                          name="status"
+                          className="form-select form-select-sm d-inline-block ms-2"
+                          style={{ width: "auto" }}
+                          required
+                          value={formData.status}
+                          onChange={handleInputChange}
+                        >
+                          {Object.values(ORDER_STATUS).map((status) => (
+                            <option key={status} value={status}>
+                              {status.charAt(0).toUpperCase() +
+                                status.slice(1).toLowerCase()}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <span
+                          className={`badge px-3 py-2 rounded-pill ${
+                            order.status == ORDER_STATUS.PENDING
+                              ? "bg-warning"
+                              : order.status == ORDER_STATUS.CONFIRMED
+                              ? "bg-info"
+                              : order.status == ORDER_STATUS.SHIPPED
+                              ? "bg-primary"
+                              : order.status == ORDER_STATUS.DELIVERED
+                              ? "bg-success"
+                              : order.status == ORDER_STATUS.CANCELLED
+                              ? "bg-danger"
+                              : "bg-secondary"
+                          }`}
+                        >
+                          {orderSelected.status}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -102,15 +141,22 @@ function OrderDetails({ orderSelected, onClose }) {
                     </h6>
                     <p className="mb-1 small">
                       <strong>Name:</strong>
-                      <span className="ms-2"></span>
+                      <span className="ms-2">
+                        {orderSelected.shippingInfo?.firstName}{" "}
+                        {orderSelected.shippingInfo?.lastName}
+                      </span>
                     </p>
                     <p className="mb-1 small">
                       <strong>Email:</strong>
-                      <span className="ms-2"></span>
+                      <span className="ms-2">
+                        {orderSelected.shippingInfo?.email}
+                      </span>
                     </p>
                     <p className="mb-0 small">
                       <strong>Phone:</strong>
-                      <span className="ms-2"></span>
+                      <span className="ms-2">
+                        {orderSelected.shippingInfo?.phone}
+                      </span>
                     </p>
                   </div>
                 </div>
@@ -126,27 +172,32 @@ function OrderDetails({ orderSelected, onClose }) {
                       <i className="bi bi-truck me-2"></i>
                       Tracking Information
                     </h6>
-                    <div>
-                      <input
-                        type="text"
-                        id="trackingNumber"
-                        name="trackingNumber"
-                        className="form-control form-control-sm"
-                        placeholder="Enter tracking number..."
-                      />
-                    </div>
-                    <div>
-                      <label className="form-label small">
-                        Tracking Number
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control form-control-sm"
-                        value=""
-                        disabled
-                        readOnly
-                      />
-                    </div>
+                    {isAdmin ? (
+                      <div>
+                        <input
+                          type="text"
+                          id="trackingNumber"
+                          name="trackingNumber"
+                          className="form-control form-control-sm"
+                          placeholder="Enter tracking number..."
+                          value={formData.trackingNumber}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    ) : (
+                      <div>
+                        <label className="form-label small">
+                          Tracking Number
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
+                          value={orderSelected.trackingNumber || "N/A"}
+                          disabled
+                          readOnly
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -157,7 +208,13 @@ function OrderDetails({ orderSelected, onClose }) {
                       <i className="bi bi-geo-alt me-2"></i>
                       Shipping Address
                     </h6>
-                    <address className="mb-0 small"></address>
+                    <address className="mb-0 small">
+                      {orderSelected.shippingInfo?.address}
+                      <br />
+                      {orderSelected.shippingInfo?.city},{" "}
+                      {orderSelected.shippingInfo?.state}{" "}
+                      {orderSelected.shippingInfo?.zipCode}
+                    </address>
                   </div>
                 </div>
               </div>
@@ -180,28 +237,32 @@ function OrderDetails({ orderSelected, onClose }) {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td className="fw-medium small">NAME</td>
-                        <td className="small">$$$</td>
-                        <td>
-                          <span className="badge bg-secondary small">
-                            Quantity
-                          </span>
-                        </td>
-                        <td className="fw-bold text-success small">
-                          price * quantity
-                        </td>
-                      </tr>
+                      {orderSelected.items?.map((item, index) => (
+                        <tr key={index}>
+                          <td className="fw-medium small">{item.name}</td>
+                          <td className="small">${item.price?.toFixed(2)}</td>
+                          <td>
+                            <span className="badge bg-secondary small">
+                              {item.quantity}
+                            </span>
+                          </td>
+                          <td className="fw-bold text-success small">
+                            ${(item.price * item.quantity)?.toFixed(2)}
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
 
-                <div className="border-top pt-2">
+                <div className=" pt-2">
                   <div className="row text-end">
                     <div className="col">
                       <h6 className="mb-0 text-success">
                         <strong>Total:</strong>
-                        <span className="ms-2">$$ TOTAL</span>
+                        <span className="ms-2">
+                          ${orderSelected.totalAmount?.toFixed(2)}
+                        </span>
                       </h6>
                     </div>
                   </div>
@@ -210,37 +271,44 @@ function OrderDetails({ orderSelected, onClose }) {
             </div>
           </div>
           <div className="modal-footer  border-0 p-3">
-            <form className="d-flex w-100 justify-content-end gap-2">
+            {isAdmin ? (
+              <form className="d-flex w-100 justify-content-end gap-2">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="btn btn-outline-secondary btn-sm"
+                >
+                  <i className="bi bi-x-circle me-1"></i>
+                  Close
+                </button>
+                <button type="submit" className="btn btn-success btn-sm">
+                  {isLoading ? (
+                    <>
+                      <span
+                        className="spinner-border spinner-border-sm me-1"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      Updating...
+                    </>
+                  ) : (
+                    <>
+                      <i className="bi bi-check-lg me-1"></i>
+                      Save Changes
+                    </>
+                  )}
+                </button>
+              </form>
+            ) : (
               <button
                 type="button"
-                className="btn btn-outline-secondary btn-sm"
+                onClick={onClose}
+                className="btn btn-outline-secondary btn-sm px-4"
               >
                 <i className="bi bi-x-circle me-1"></i>
                 Close
               </button>
-              <button type="submit" className="btn btn-success btn-sm">
-                <>
-                  <span
-                    className="spinner-border spinner-border-sm me-1"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                  Updating...
-                </>
-                <>
-                  <i className="bi bi-check-lg me-1"></i>
-                  Save Changes
-                </>
-              </button>
-            </form>
-            <button
-              type="button"
-              onClick={onClose}
-              className="btn btn-outline-secondary btn-sm px-4"
-            >
-              <i className="bi bi-x-circle me-1"></i>
-              Close
-            </button>
+            )}
           </div>
         </div>
       </div>

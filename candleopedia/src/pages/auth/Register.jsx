@@ -63,7 +63,8 @@ function Register() {
       //registeration
       const result = await registerUser(formData).unwrap();
       dispatch(setUser(result));
-      console.log(result);
+      toast.success("Account created successfully! Welcome to CandleOPedia!");
+      navigate(ROUTES.HOME);
     } catch (error) {
       toast.error(error);
     } finally {

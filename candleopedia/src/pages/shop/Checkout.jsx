@@ -70,7 +70,11 @@ function Checkout() {
                         type="text"
                         className="form-control"
                         name="firstName"
-                        defaultValue="John"
+                        defaultValue={
+                          isAuthenticated && user?.displayName
+                            ? user.displayName.split(" ")[0]
+                            : ""
+                        }
                         required
                       />
                     </div>
@@ -82,7 +86,11 @@ function Checkout() {
                         type="text"
                         className="form-control"
                         name="lastName"
-                        defaultValue="Doe"
+                        defaultValue={
+                          isAuthenticated && user?.displayName
+                            ? user.displayName.split(" ").slice(1).join()
+                            : ""
+                        }
                         required
                       />
                     </div>
@@ -97,7 +105,9 @@ function Checkout() {
                         type="email"
                         className="form-control"
                         name="email"
-                        defaultValue="john.doe@example.com"
+                        defaultValue={
+                          isAuthenticated && user?.email ? user.email : ""
+                        }
                         required
                       />
                     </div>
@@ -109,7 +119,6 @@ function Checkout() {
                         type="tel"
                         className="form-control"
                         name="phone"
-                        defaultValue="(555) 123-4567"
                         required
                       />
                     </div>
@@ -122,7 +131,6 @@ function Checkout() {
                     type="text"
                     className="form-control"
                     name="address"
-                    defaultValue="123 Main Street, Apt 4B"
                     required
                   />
                 </div>
@@ -135,7 +143,6 @@ function Checkout() {
                         type="text"
                         className="form-control"
                         name="city"
-                        defaultValue="New York"
                         required
                       />
                     </div>
@@ -147,7 +154,6 @@ function Checkout() {
                         type="text"
                         className="form-control"
                         name="state"
-                        defaultValue="NY"
                         required
                       />
                     </div>
@@ -159,7 +165,6 @@ function Checkout() {
                         type="text"
                         className="form-control"
                         name="zipCode"
-                        defaultValue="10001"
                         required
                       />
                     </div>

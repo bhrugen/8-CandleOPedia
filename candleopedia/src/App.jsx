@@ -13,6 +13,11 @@ import { doc, getDoc } from "firebase/firestore";
 function App() {
   const dispatch = useDispatch();
   const theme = useSelector((state) => state.theme.theme);
+
+  useEffect(() => {
+    document.body.setAttribute("data-bs-theme", theme);
+  }, [theme]);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
